@@ -327,7 +327,7 @@ $diff = $old_datetime->diff(new DateTime($current_time));
           <img src="../images/01.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Pratikkumar Ginoya</a>
+          <a href="#" class="d-block">NachiyarTRADERS</a>
         </div>
       </div>
 
