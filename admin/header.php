@@ -1,44 +1,38 @@
-<?php include_once 'connection.php';
+<?php 
+  include_once 'connection.php';
 
-if (!isset($_SESSION['login_id']))
-{
-      header('location:index.php');
-}
+  if (!isset($_SESSION['login_id'])) {
+    header('location:index.php');
+  }
 
-/* To find the URL */
-$url =  isset($_SERVER['HTTPS']) &&
-    $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";  
- 
-$url = $_SERVER['REQUEST_URI'];   
+  /* To find the URL */
+  $url =  isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";  
+   
+  $url = $_SERVER['REQUEST_URI'];   
 
-$sql_select_mg = "select * from `contact_us` where `status`='1'";
-$data_mg = mysqli_query($conn,$sql_select_mg);
-$notification = mysqli_num_rows($data_mg);
+  $sql_select_mg = "select * from `contact_us` where `status`='1'";
+  $data_mg = mysqli_query($conn,$sql_select_mg);
+  $notification = mysqli_num_rows($data_mg);
 
-if($notification>0)
-{
-$sql_select_mg = "select * from `contact_us` where `status`='1' order by `id` desc";
-$data_mg = mysqli_query($conn,$sql_select_mg);
-$row = mysqli_fetch_assoc($data_mg);
-date_default_timezone_set('Asia/Kolkata');
-$current_time = date('Y-m-d H:i:s');
+  if($notification>0) {
+    $sql_select_mg = "select * from `contact_us` where `status`='1' order by `id` desc";
+    $data_mg = mysqli_query($conn,$sql_select_mg);
+    $row = mysqli_fetch_assoc($data_mg);
+    date_default_timezone_set('Asia/Kolkata');
+    $current_time = date('Y-m-d H:i:s');
 
-$o_time = $row['time'];
+    $o_time = $row['time'];
 
-$old_datetime = new DateTime($o_time); 
-$diff = $old_datetime->diff(new DateTime($current_time));
-}
-
- ?>
-
-
+    $old_datetime = new DateTime($o_time); 
+    $diff = $old_datetime->diff(new DateTime($current_time));
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NachiyarTRADERS | Dashboard</title>
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
