@@ -1224,7 +1224,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   height: 100vh;
 }
 
-@media (max-width: 991px) {
+/*@media (max-width: 991px) {
   .item-slick1 {
     height: calc(100vh - 70px) !important;
   }
@@ -1241,7 +1241,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   width: auto;
   height: auto;
   font-size: 80px;
-  color: rgba(0,0,0,0.3);
   position: absolute;
   opacity: 0;
   
@@ -1251,7 +1250,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   -ms-transform: translateY(-50%);
   -o-transform: translateY(-50%);
   transform: translateY(-50%);
-
   z-index: 200;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
@@ -1260,22 +1258,70 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 }
 
 .wrap-slick1:hover .arrow-slick1 {
-  opacity: 1;
+  opacity: 0.25;
 }
 
 .arrow-slick1:hover {
   color: #7280e0;
+}*/
+
+.arrow-slick1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+
+  font-size: 38px;
+  color: #ffffff;
+  /*background-color: rgba(0, 0, 0, 0.5);*/
+
+  border: none;
+  border-radius: 0; /* Square shape */
+  cursor: pointer;
+
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+
+  opacity: 0;
+  transition: all 0.4s ease;
 }
+
+/* Show arrows on slider hover */
+.wrap-slick1:hover .arrow-slick1 {
+  opacity: 1;
+}
+
+/* Hover effect */
+.arrow-slick1:hover {
+  background-color: transparent;
+  color: #ffffff;
+}
+
+/* Responsive mobile */
+@media (max-width: 767px) {
+  .arrow-slick1 {
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+    font-size: 20px;
+  }
+}
+
 
 .next-slick1 {
   top: 180px;
-  right: 50px;
+  right: 41px;
   left: auto;
 }
 
 .prev-slick1 {
   top: 180px;
-  left: 50px;
+  left: 41px;
   right: auto;
 }
 
@@ -1286,6 +1332,13 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
   .prev-slick1 {
     left: 15px;
+  }
+
+  .item-slick1 {
+    height: calc(20vh - 50px);
+    background-size: 91%;
+    background-repeat: no-repeat;
+    background-position: center center;
   }
 }
 
@@ -3241,8 +3294,8 @@ input.num-product::-webkit-inner-spin-button {
 
   /*---------------------------------------------*/
   .respon5 {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
   }
 }
 

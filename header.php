@@ -75,18 +75,15 @@
 						&nbsp;
 					</div>
 					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
+						<!-- <a href="#" class="flex-c-m trans-04 p-lr-25">
 							Help & FAQs
-						</a>
-
+						</a>-->
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
 							EN
 						</a>
-
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
 							INR
 						</a>
-
 						<?php if (isset($_SESSION['login']))
 						{ ?>
 							<div class="profile-main-menu">
