@@ -12,13 +12,13 @@ if (isset($_POST['submit']))
 		$row = $_SESSION['user_row'];
 		$id = $row['id'];
 
-		$sql_select = "select * from user_register where password='$password2' and id='$id'";
+		$sql_select = "select * from user where password='$password2' and id='$id'";
 		$data = mysqli_query($conn,$sql_select);
 		$count = mysqli_num_rows($data);
 
 		if($count==0)
 		{
-			$sql_update = "update user_register set password='$password2' where id='$id'";
+			$sql_update = "update user set password='$password2' where id='$id'";
 			mysqli_query($conn,$sql_update);
 
 			{ ?>

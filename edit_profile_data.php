@@ -4,7 +4,7 @@ if(isset($_SESSION['login']))
 {
 	$id = $_SESSION['login'];
 
-	$sql_select = "select * from user_register where id='$id'";
+	$sql_select = "select * from user where id='$id'";
 	$data = mysqli_query($conn,$sql_select);
 	$row = mysqli_fetch_assoc($data);
 
@@ -14,7 +14,7 @@ if(isset($_SESSION['login']))
 	{
 		$password = $_POST['password'];
 
-		$sql_check = "select * from user_register where id='$id' and password='$password'";
+		$sql_check = "select * from user where id='$id' and password='$password'";
 		$data_check = mysqli_query($conn,$sql_check);
 		$check = mysqli_num_rows($data_check);
 
@@ -24,14 +24,14 @@ if(isset($_SESSION['login']))
 			$email = $_POST['email_e'];
 			$mobile = $_POST['mobile_e'];
 
-			$sql_select_email = "select * from user_register where id='$id'";
+			$sql_select_email = "select * from user where id='$id'";
 			$data_email = mysqli_query($conn,$sql_select_email);
 			$row_email = mysqli_fetch_assoc($data_email);
 			$existing_email = $row_email['email'];
 
 			if($email==$existing_email)
 			{
-				$sql_update = "update user_register set name='$name',email='$email',mobile_number='$mobile' where id='$id'";
+				$sql_update = "update user set name='$name',email='$email',mobile_number='$mobile' where id='$id'";
 				mysqli_query($conn,$sql_update);
 
 				header('location:my_profile.php');

@@ -27,18 +27,18 @@ $data_blog = mysqli_query($conn,$sql_select_blog);
 
 			<?php while ($row = mysqli_fetch_assoc($data_slider)) { ?>
 				
-				<div class="item-slick1" style="background-image: url(admin/image/<?php echo $row['image']; ?>);">
+				<div class="item-slick1" style="background-image: url(admin/image/<?php echo $row['image']; ?>);" title="<?=$row['title'];?>">
 					<div class="container h-full">
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 							<div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
 								<span class="ltext-101 cl2 respon2">
-									<?php echo $row['details']; ?>
+									<?php //echo $row['details']; ?>
 								</span>
 							</div>
 								
 							<div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
 								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									<?php echo $row['title']; ?>
+									<?php //echo $row['title']; ?>
 								</h2>
 							</div>
 								

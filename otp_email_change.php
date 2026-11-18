@@ -14,7 +14,7 @@ if (isset($_POST['verify_otp']))
 		$mobile = $_SESSION['new_mobile'];
 		$id = $_SESSION['login'];
 
-		$sql_update = "update user_register set name='$name',email='$email',mobile_number='$mobile' where id='$id'";
+		$sql_update = "update user set name='$name',email='$email',mobile_number='$mobile' where id='$id'";
 		mysqli_query($conn,$sql_update);
 
 		header('location:my_profile.php');

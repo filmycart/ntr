@@ -63,13 +63,12 @@ if (isset($_POST['edited_thought']))
                     <input type="text" class="form-control" id="exampleInputPassword1" maxlength="50" placeholder="Enter Some Details of New Photo" name="thought_by" maxlength="50" required value="<?php echo @$row['thought_by']; ?>">
                   </div>
                 </div>
-                <!-- /.card-body -->
-           
+                <!-- /.card-body -->           
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary" name="edited_thought">Submit</button>
                 </div>
                 <div class="card-footer">
-                  <a href="manage-about.php" class="btn btn-primary">Back to View-About</a>
+                  <a href="manage-about.php" class="btn btn-primary">Back</a>
                 </div>
               </form>
             </div>
@@ -98,5 +97,4 @@ if (isset($_POST['edited_thought']))
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
 <?php include_once 'scripts.php'; ?>

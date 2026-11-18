@@ -1,63 +1,42 @@
-<?php include_once 'connection.php'; 
+<?php 
+  include_once('connection.php'); 
 
-
-/* we got this only after POST-Sign In, Else is return to Login page */
-if (isset($_SESSION['login_id']))
-{
-      header('location:dashboard.php');
-}
-
-
-/* Login process run if above session is not active*/
-if (isset($_POST['signin']))
-{
-    
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    $sql_select = "select * from `login` where `email`='$email' and `password`='$password'";
-    $data = mysqli_query($conn,$sql_select);
-
-    $data_count = mysqli_num_rows($data);
-
-    if($data_count > 0)
-    {
-        $row = mysqli_fetch_assoc($data);
-
-        $_SESSION['login_id'] = $row['id'];
-
+  /* we got this only after POST-Sign In, Else is return to Login page */
+  if (isset($_SESSION['login_id'])) {
         header('location:dashboard.php');
+  }
+
+  /* Login process run if above session is not active*/
+  if (isset($_POST['signin'])) {
+      $email = $_POST['email'];
+      $password = $_POST['password'];
+
+      $sql_select = "select * from `admin_user` where `email`='$email' and `password`='$password'";
+      $data = mysqli_query($conn,$sql_select);
+
+      $data_count = mysqli_num_rows($data);
+
+      if($data_count > 0) {
+          $row = mysqli_fetch_assoc($data);
+          $_SESSION['login_id'] = $row['id'];
+          header('location:admin.php?pg-url=home');
+      } else {
+          $sql_select = "select * from `admin_user`";
+          $data = mysqli_query($conn,$sql_select);
+          $row = mysqli_fetch_assoc($data);
+
+      if($row == null) {
+        echo "There is no any data has been registered... Kindly register now first.... <br><br><br>";
+      } elseif($row['email'] != $email && $row['password'] != $password) {
+        echo "Entered Email and Password are incorrect... Please enter correct details in both... <br><br><br>";
+      } elseif($row['email'] != $email) {
+        echo "Entered Email is incorrect... Please enter correct email... <br><br><br>";
+      } else {
+        echo "Entered Password is incorrect... Please enter correct password... <br><br><br>";
+      }
     }
-    else
-    {
-        $sql_select = "select * from `login`";
-        $data = mysqli_query($conn,$sql_select);
-
-        $row = mysqli_fetch_assoc($data);
-
-        if($row == null)
-        {
-            echo "There is no any data has been registered... Kindly register now first.... <br><br><br>";
-        }
-        elseif($row['email'] != $email && $row['password'] != $password)
-        {
-            echo "Entered Email and Password are incorrect... Please enter correct details in both... <br><br><br>";
-        }
-        elseif($row['email'] != $email)
-        {
-            echo "Entered Email is incorrect... Please enter correct email... <br><br><br>";
-        }
-        else
-        {
-            echo "Entered Password is incorrect... Please enter correct password... <br><br><br>";
-        }
-
-    }
-}
-
+  }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

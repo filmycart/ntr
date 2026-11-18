@@ -25,7 +25,7 @@ if(isset($_GET['d_id']))
 if(isset($_SESSION['login']))
 {
 $login_id = $_SESSION['login'];
-$sql_select_login = "select * from `user_register` where `id`='$login_id'";
+$sql_select_login = "select * from `user` where `id`='$login_id'";
 $data_login = mysqli_query($conn,$sql_select_login);
 $row_login = mysqli_fetch_assoc($data_login);
 

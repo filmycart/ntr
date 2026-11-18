@@ -1,5 +1,4 @@
-<?php include_once 'header.php';
-
+<?php 
 if (isset($_POST['submit_product']))
 {
     $name = $_POST['name'];
@@ -27,7 +26,6 @@ if (isset($_POST['submit_product']))
     move_uploaded_file($_FILES['image2']['tmp_name'],$path2);
     move_uploaded_file($_FILES['image3']['tmp_name'],$path3);
 
-
     $sql_insert = "insert into `product`(`name`,`price`,`category`,`tag`,`type`,`one_line_title`,`size`,`color`, `description`,`weight`,`dimension`,`material`,`image1`,`image2`,`image3`,`stock`)values('$name','$price','$category','$tag','$type','$one_line_title','$size','$color','$description','$weight','$dimension','$material','$image1','$image2','$image3','$stock')";
     mysqli_query($conn,$sql_insert);
 
@@ -38,26 +36,7 @@ if (isset($_POST['submit_product']))
 ?>
 
   
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Add New Product</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
+  <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -66,7 +45,7 @@ if (isset($_POST['submit_product']))
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add New Product</h3>
+                <h3 class="card-title">Add Product</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -234,17 +213,3 @@ if (isset($_POST['submit_product']))
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <?php include_once 'footer.php'; ?>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include_once 'scripts.php'; ?>
