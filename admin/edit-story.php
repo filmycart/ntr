@@ -38,12 +38,12 @@ if (isset($_POST['edited_story']))
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Our Story</h1>
+            <h1>Edit/Update About</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
+              <li class="breadcrumb-item active">Edit/Update About</li>
             </ol>
           </div>
         </div>
@@ -59,7 +59,7 @@ if (isset($_POST['edited_story']))
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Edit Our Story</h3>
+                <h3 class="card-title">Edit/Update About</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -68,7 +68,7 @@ if (isset($_POST['edited_story']))
                 <div class="card-body">
                    <div class="form-group">
                     <label for="exampleInputPassword1">Details of Story</label>
-                    <textarea rows="10" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Full Details of New Blog" name="s_detail" maxlength="1500" required><?php echo $row['story_detail']; ?></textarea>
+                    <textarea rows="10" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Full Details of New Blog" name="s_detail" maxlength="5000" required><?php echo $row['story_detail']; ?></textarea>
                   </div>
                   <div class="form-group">
                     <label for="exampleInputFile">Add New Image of Story</label>
@@ -90,7 +90,7 @@ if (isset($_POST['edited_story']))
                   <button type="submit" class="btn btn-primary" name="edited_story">Submit</button>
                 </div>
                 <div class="card-footer">
-                  <a href="manage-about.php" class="btn btn-primary">Back to View-About</a>
+                  <a href="manage-about.php" class="btn btn-primary">Back</a>
                 </div>
               </form>
             </div>

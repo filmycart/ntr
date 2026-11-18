@@ -1,38 +1,35 @@
-<?php include_once 'site_connection.php';
+<?php 
+	include_once('site_connection.php');
 
-if(isset($_SESSION['login']))
-{
-$login_id = $_SESSION['login'];
-$sql_select_login = "select * from `user_register` where `id`='$login_id'";
-$data_login = mysqli_query($conn,$sql_select_login);
-$row_login = mysqli_fetch_assoc($data_login);
+	if(isset($_SESSION['login'])) {
+		$login_id = $_SESSION['login'];
+		$sql_select_login = "select * from `user` where `id`='$login_id'";
+		$data_login = mysqli_query($conn,$sql_select_login);
+		$row_login = mysqli_fetch_assoc($data_login);
 
-$sql_select_cart = "select * from `cart` where `user_id`='$login_id'";
-$data_cart = mysqli_query($conn,$sql_select_cart);
+		$sql_select_cart = "select * from `cart` where `user_id`='$login_id'";
+		$data_cart = mysqli_query($conn,$sql_select_cart);
 
-$amt_total = "select * from `cart` where `user_id`='$login_id'";
-$data_total = mysqli_query($conn,$amt_total);
+		$amt_total = "select * from `cart` where `user_id`='$login_id'";
+		$data_total = mysqli_query($conn,$amt_total);
 
-$total_price = 0;
-while($row_total = mysqli_fetch_assoc($data_total))
-{
-	$total_price = $total_price + $row_total['price'] * $row_total['num_product'];
-}
+		$total_price = 0;
+		while($row_total = mysqli_fetch_assoc($data_total)) {
+			$total_price = $total_price + $row_total['price'] * $row_total['num_product'];
+		}
 
-$data_count = mysqli_num_rows($data_total);
-}
-
-
-
+		$data_count = mysqli_num_rows($data_total);
+	}
  ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Home</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Favicon -->
+    <link rel="icon" href="images/icons/favicon.png">
+    <link rel="apple-touch-icon" href="images/icons/favicon.png">
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="images/icons/favicon.png"/>
 <!--===============================================================================================-->
@@ -75,9 +72,8 @@ $data_count = mysqli_num_rows($data_total);
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="left-top-bar">
-						Free shipping for standard order over $100
+						&nbsp;
 					</div>
-
 					<div class="right-top-bar flex-w h-full">
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
 							Help & FAQs
@@ -224,11 +220,11 @@ $data_count = mysqli_num_rows($data_total);
 		<!-- Menu Mobile -->
 		<div class="menu-mobile">
 			<ul class="topbar-mobile">
-				<li>
+				<!-- <li>
 					<div class="left-top-bar">
 						Free shipping for standard order over $100
 					</div>
-				</li>
+				</li> -->
 
 				<li>
 					<div class="right-top-bar flex-w h-full">

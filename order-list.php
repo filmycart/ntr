@@ -5,7 +5,7 @@
 if(isset($_SESSION['login']))
 {
 	$login_id = $_SESSION['login'];
-	$sql_select_login = "select * from `user_register` where `id`='$login_id'";
+	$sql_select_login = "select * from `user` where `id`='$login_id'";
 	$data_login = mysqli_query($conn,$sql_select_login);
 	$row_login = mysqli_fetch_assoc($data_login);
 
@@ -25,7 +25,7 @@ if(isset($_SESSION['login']))
 			$total_price = $total_price + $row_total['price'] * $row_total['num_product'];
 		}
 
-		$sql_select_r = "select * from `user_register` where `id`='$login_id'";
+		$sql_select_r = "select * from `user` where `id`='$login_id'";
 		$data_r = mysqli_query($conn,$sql_select_r);
 		$row_r = mysqli_fetch_assoc($data_r);
 
@@ -105,9 +105,9 @@ else
 			<!-- Topbar -->
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
-					<div class="left-top-bar">
+					<<!-- div class="left-top-bar">
 						Free shipping for standard order over $100
-					</div>
+					</div> -->
 
 					<div class="right-top-bar flex-w h-full">
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
@@ -250,11 +250,11 @@ else
 		<!-- Menu Mobile -->
 		<div class="menu-mobile">
 			<ul class="topbar-mobile">
-				<li>
+				<!-- <li>
 					<div class="left-top-bar">
 						Free shipping for standard order over $100
 					</div>
-				</li>
+				</li> -->
 
 				<li>
 					<div class="right-top-bar flex-w">
@@ -360,7 +360,7 @@ else
 			</a>
 
 			<span class="stext-109 cl4">
-				Your Order-list
+				Your Orders
 			</span>
 		</div>
 	</div>

@@ -1,11 +1,4 @@
 <?php
-	/*session_start();
-	ob_start();
-
-	$conn = mysqli_connect('localhost','root','Nachiyar*1984','ntr_new');*/
- ?>
-
-<?php
 	if (session_status() === PHP_SESSION_NONE) {
 	    session_start();
 	}

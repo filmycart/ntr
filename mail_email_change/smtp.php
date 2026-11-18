@@ -4,7 +4,7 @@ include_once '../site_connection.php';
 
 $id = $_SESSION['login'];
 
-$sql_select = "select * from user_register where id='$id'";
+$sql_select = "select * from user where id='$id'";
 $data = mysqli_query($conn,$sql_select);
 $row = mysqli_fetch_assoc($data);
 

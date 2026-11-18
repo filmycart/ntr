@@ -38,12 +38,12 @@ if (isset($_POST['edited_mission']))
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Our Mission</h1>
+            <h1>Edit/Update Mission</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
+              <li class="breadcrumb-item active">Edit/Update Mission</li>
             </ol>
           </div>
         </div>
@@ -59,7 +59,7 @@ if (isset($_POST['edited_mission']))
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Edit Our Mission</h3>
+                <h3 class="card-title">Edit/Update Mission</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -90,7 +90,7 @@ if (isset($_POST['edited_mission']))
                   <button type="submit" class="btn btn-primary" name="edited_mission">Submit</button>
                 </div>
                 <div class="card-footer">
-                  <a href="manage-about.php" class="btn btn-primary">Back to View-About</a>
+                  <a href="manage-about.php" class="btn btn-primary">Back</a>
                 </div>
               </form>
             </div>

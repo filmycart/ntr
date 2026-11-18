@@ -6,7 +6,7 @@ if (isset($_POST['send_otp']))
 {
 	$email = $_POST['email'];
 
-	$sql_select = "select * from `user_register` where `email`='$email'";
+	$sql_select = "select * from `user` where `email`='$email'";
 	$data = mysqli_query($conn,$sql_select);
 	$row_count = mysqli_num_rows($data);
 

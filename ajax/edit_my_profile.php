@@ -10,7 +10,7 @@ $msg = "";
 		$email = $_POST['email'];
 		$mobile = $_POST['mobile'];
 
-		$sql_select_email = "select * from user_register where id='$id'";
+		$sql_select_email = "select * from user where id='$id'";
 		$data_email = mysqli_query($conn,$sql_select_email);
 		$row = mysqli_fetch_assoc($data_email);
 
@@ -30,7 +30,7 @@ $msg = "";
 			}
 			else
 			{
-				$sql_select_m = "select * from user_register where mobile_number='$mobile'";
+				$sql_select_m = "select * from user where mobile_number='$mobile'";
 				$data_m = mysqli_query($conn,$sql_select_m);
 				$count_m = mysqli_num_rows($data_m);
 
@@ -46,7 +46,7 @@ $msg = "";
 		}
 		else
 		{
-			$sql_select_e = "select * from user_register where email='$email'";
+			$sql_select_e = "select * from user where email='$email'";
 			$data_e = mysqli_query($conn,$sql_select_e);
 			$count_e = mysqli_num_rows($data_e);
 

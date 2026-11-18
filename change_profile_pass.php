@@ -12,7 +12,7 @@ if(isset($_SESSION['login']))
 		$new_pass = $_POST['new_pass'];
 		$new_pass2 = $_POST['new_pass2'];
 
-		$sql_check = "select * from user_register where password='$curr_pass' and id='$id'";
+		$sql_check = "select * from user where password='$curr_pass' and id='$id'";
 		$data_check = mysqli_query($conn,$sql_check);
 		$check = mysqli_num_rows($data_check);
 
@@ -27,7 +27,7 @@ if(isset($_SESSION['login']))
 				}
 				else
 				{
-					$sql_update = "update user_register set password='$new_pass2' where id='$id'";
+					$sql_update = "update user set password='$new_pass2' where id='$id'";
 					mysqli_query($conn,$sql_update);
 
 					$msg = "";

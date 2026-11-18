@@ -1,8 +1,9 @@
 <?php include_once 'header.php';
 
-if (isset($_GET['e_id']))
-{
+if (isset($_GET['e_id'])) {
     $edit_id = $_GET['e_id'];
+} elseif (isset($_GET['eId'])) {
+    $edit_id = $_GET['eId'];
 }
 
 $sql_select = "select * from `slider` where `id`='$edit_id'";
@@ -92,10 +93,18 @@ if (isset($_POST['submit_slider']))
                     </div> 
                   </div>
 
+                  <?php
+                      if((isset($row['image'])) && (!empty($row['image']))){
+                  ?>
+
                   <label for="exampleInputFile">Current Image of Slider</label>
                   <div style="width: 200px; height: 200px;">
                       <img src="image/<?php echo $row['image']; ?>" style="height: 100%; width: 100%; object-fit: cover;">
                   </div>
+
+                  <?php
+                    }  
+                  ?>
  
                 </div>
                 <!-- /.card-body -->

@@ -12,11 +12,11 @@ if (isset($_POST['register']))
 
 	if($password1 == $password2)
 	{
-		$sql_select_email = "select * from `user_register` where `email`='$email'";
+		$sql_select_email = "select * from `user` where `email`='$email'";
 		$data_email = mysqli_query($conn,$sql_select_email);
 		$email_count = mysqli_num_rows($data_email);
 
-		$sql_select_mobile = "select * from `user_register` where `mobile_number`='$mobile'";
+		$sql_select_mobile = "select * from `user` where `mobile_number`='$mobile'";
 		$data_mobile = mysqli_query($conn,$sql_select_mobile);
 		$mobile_count = mysqli_num_rows($data_mobile);
 
@@ -24,7 +24,7 @@ if (isset($_POST['register']))
 			{
 				if($mobile_count==0)
 				{
-					$sql_insert = "insert into `user_register`(`name`,`email`,`mobile_number`,`password`)values('$name','$email','$mobile','$password1')";
+					$sql_insert = "insert into `user`(`name`,`email`,`mobile_number`,`password`)values('$name','$email','$mobile','$password1')";
 					mysqli_query($conn,$sql_insert);
 
 					header('location:login_home.php');

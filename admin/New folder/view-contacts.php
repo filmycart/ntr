@@ -16,12 +16,12 @@ mysqli_query($conn,$update_sql);
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Data of those who have contacted us....</h1>
+            <h1>Contact Us</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">DataTables</li>
+              <li class="breadcrumb-item active">Contact Us</li>
             </ol>
           </div>
         </div>
@@ -35,7 +35,7 @@ mysqli_query($conn,$update_sql);
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Contacted Us Data</h3>
+                <h3 class="card-title">Contact Us</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
