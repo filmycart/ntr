@@ -5,7 +5,6 @@
       <img src="dist/img/AdminLTELogo.png" alt="NachiyarTRADERS Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">NachiyarTRADERS</span>
     </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
@@ -17,7 +16,6 @@
           <a href="#" class="d-block">NachiyarTRADERS</a>
         </div>
       </div>
-
       <!-- SidebarSearch Form -->
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
@@ -57,13 +55,13 @@
                   </p>
               </a>
               <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                       <a href="admin.php?pg-url=add-slider"
                          class="nav-link <?= $addSliderActive ?>">
                           <i class="nav-icon fas fa-plus-circle"></i>
                           <p>Add Slider</p>
                       </a>
-                  </li>
+                  </li> -->
                   <li class="nav-item">
                       <a href="admin.php?pg-url=sliders"
                          class="nav-link <?= $slidersActive ?>">
@@ -79,9 +77,8 @@
             data-widget="treeview"
             role="menu"
             data-accordion="false">
-
           <!-- Products -->
-          <li class="nav-item <?= $productsTreeMenu ?>">
+          <li class="nav-item <?=$productsTreeMenu ?>">
               <a href="#" class="nav-link <?= $productsActive ?>">
                   <i class="nav-icon fas fa-boxes"></i>
                   <p>Products
