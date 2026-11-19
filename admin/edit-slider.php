@@ -1,45 +1,37 @@
-<?php include_once 'header.php';
+<?php 
+  include_once 'header.php';
 
-if (isset($_GET['e_id'])) {
-    $edit_id = $_GET['e_id'];
-} elseif (isset($_GET['eId'])) {
-    $edit_id = $_GET['eId'];
-}
+  if (isset($_GET['e_id'])) {
+      $edit_id = $_GET['e_id'];
+  } elseif (isset($_GET['eId'])) {
+      $edit_id = $_GET['eId'];
+  }
 
-$sql_select = "select * from `slider` where `id`='$edit_id'";
-$data = mysqli_query($conn,$sql_select);
-$row = mysqli_fetch_assoc($data);
+  $sql_select = "select * from `slider` where `id`='$edit_id'";
+  $data = mysqli_query($conn,$sql_select);
+  $row = mysqli_fetch_assoc($data);
 
+  if (isset($_POST['submit_slider'])) {
+      $title = $_POST['title'];
+      $details = $_POST['details'];
+      $image = $_FILES['image']['name'];
 
-if (isset($_POST['submit_slider']))
-{
-    $title = $_POST['title'];
-    $details = $_POST['details'];
-    $image = $_FILES['image']['name'];
+      if ($image=="") {
+          $image = $row['image'];
+      } else {
+          unlink('image/'.$row['image']);
+          
+          $image = rand(0,1000000).$_FILES['image']['name'];
+          $path = 'image/'.$image;
+          move_uploaded_file($_FILES['image']['tmp_name'],$path);
+      }
 
-    if ($image=="") 
-    {
-        $image = $row['image'];
-    }
-    else
-    {
-        unlink('image/'.$row['image']);
-        
-        $image = rand(0,1000000).$_FILES['image']['name'];
-        $path = 'image/'.$image;
-        move_uploaded_file($_FILES['image']['tmp_name'],$path);
-    }
+      $sql_update = "update `slider` set `title`='$title',`details`='$details',`image`='$image' where `id`='$edit_id'";
+      mysqli_query($conn,$sql_update);
 
-    $sql_update = "update `slider` set `title`='$title',`details`='$details',`image`='$image' where `id`='$edit_id'";
-    mysqli_query($conn,$sql_update);
-
-    header('location:view-slider.php');
-}
-
-
-?>
-
-  
+      header('location:view-slider.php');
+  }
+?>  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->

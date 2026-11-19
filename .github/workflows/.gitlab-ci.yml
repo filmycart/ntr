@@ -1,0 +1,58 @@
+name: Laravel Deploy to Linux Server
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Select environment based on branch
+    environment: ${{ github.ref_name == 'master' && 'production' || 'dev' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Linux Server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USER }}
+          port: ${{ vars.SERVER_PORT }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          timeout: 5m
+          command_timeout: 10m
+          script: |
+            set -e
+
+            # Select deployment folder based on branch
+            if [ "${{ github.ref_name }}" = "master" ]; then
+              DEPLOY_FOLDER_PATH="${{ vars.DEPLOY_PATH }}"
+              echo "Deploying to PRODUCTION"
+            elif [ "${{ github.ref_name }}" = "dev" ]; then
+              DEPLOY_FOLDER_PATH="${{ vars.DEPLOY_PATH }}"
+              echo "Deploying to DEVELOPMENT"
+            else
+              echo "Invalid branch"
+              exit 1
+            fi
+
+            echo "Deployment path: $DEPLOY_FOLDER_PATH"
+
+            # Navigate to deployment directory
+            cd "$DEPLOY_FOLDER_PATH"
+
+            # Git deployment
+            git fetch origin ${{ github.ref_name }}
+            # Update working directory
+            git reset --hard origin/${{ github.ref_name }}
+            git checkout ${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }}
+            
+            echo "Deployment Completed Successfully."
+
