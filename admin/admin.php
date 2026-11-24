@@ -1,6 +1,6 @@
-  <?php 
-      include_once('header.php');
-  ?>
+<?php 
+  include_once('header.php');
+?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -12,7 +12,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="admin.php?pg-url=home">Home</a></li>
               <li class="breadcrumb-item active"><?=$pgTitle?></li>
             </ol>
           </div><!-- /.col -->
@@ -26,19 +26,19 @@
       }
     ?>
   </div>
-  <!-- /.content-wrapper -->  
-<?php include_once 'footer.php'; ?>
-
-<!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<?php include_once 'scripts.php'; ?>
-
-
+    <!-- /.content-wrapper -->  
+    <?php 
+      include_once('footer.php');
+    ?>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+  <?php 
+    include_once('scripts.php');
+  ?>
 </body>
 </html>

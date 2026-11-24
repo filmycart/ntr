@@ -32,8 +32,8 @@ $next = $page_no+1;
  				<thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name of Product</th>
-                    <th>Price of Product</th>
+                    <th>Name</th>
+                    <th>Price</th>
                     <th>Category of Product</th>
                     <th>Type of Product</th>
                     <th>Stock</th>

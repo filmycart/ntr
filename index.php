@@ -4,16 +4,16 @@
 	$sql_select_slider = "SELECT * from `slider` WHERE `status` = 1 ";
 	$data_slider = mysqli_query($conn,$sql_select_slider);
 
-	$sql_select_product_bs = "select * from `product` where `tag` like '%Best-seller%' AND `stock`='In Stock'";
+	$sql_select_product_bs = "select * from `product` where `name` like '%Best-seller%'";
 	$data_product_bs = mysqli_query($conn,$sql_select_product_bs);
 
-	$sql_select_product_f = "select * from `product` where `tag` like '%Featured%' AND `stock`='In Stock'";
+	$sql_select_product_f = "select * from `product` where `name` like '%Featured%'";
 	$data_product_f = mysqli_query($conn,$sql_select_product_f);
 
-	$sql_select_product_s = "select * from `product` where `tag` like '%Sale%' AND `stock`='In Stock'";
+	$sql_select_product_s = "select * from `product` where `name` like '%Sale%'";
 	$data_product_s = mysqli_query($conn,$sql_select_product_s);
 
-	$sql_select_product_tr = "select * from `product` where `tag` like '%Top-rate%' AND `stock`='In Stock'";
+	$sql_select_product_tr = "select * from `product` where `name` like '%Top-rate%'";
 	$data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 
 	$sql_select_blog = "select * from `blog`";

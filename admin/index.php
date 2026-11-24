@@ -3,38 +3,60 @@
 
   /* we got this only after POST-Sign In, Else is return to Login page */
   if (isset($_SESSION['login_id'])) {
-        header('location:dashboard.php');
+    header('location:admin.php?pg-url=home');
   }
 
-  /* Login process run if above session is not active*/
   if (isset($_POST['signin'])) {
-      $email = $_POST['email'];
+      $email = trim($_POST['email']);
       $password = $_POST['password'];
 
-      $sql_select = "select * from `admin_user` where `email`='$email' and `password`='$password'";
-      $data = mysqli_query($conn,$sql_select);
+      // Fetch user by email only
+      $sql_select = "SELECT * FROM admin_user WHERE email = ? LIMIT 1";
 
-      $data_count = mysqli_num_rows($data);
+      $stmt = mysqli_prepare($conn, $sql_select);
 
-      if($data_count > 0) {
-          $row = mysqli_fetch_assoc($data);
-          $_SESSION['login_id'] = $row['id'];
-          header('location:admin.php?pg-url=home');
+      mysqli_stmt_bind_param($stmt, "s", $email);
+
+      mysqli_stmt_execute($stmt);
+
+      $data = mysqli_stmt_get_result($stmt);
+
+      $row = mysqli_fetch_assoc($data);
+
+      if ($row) {
+
+          // Verify entered password with stored hash
+          if (password_verify($password, $row['password'])) {
+
+              session_regenerate_id(true);
+
+              $_SESSION['login_id'] = $row['id'];
+
+              header('Location: admin.php?pg-url=home');
+              exit;
+
+          } else {
+
+              echo "Entered Password is incorrect... Please enter correct password... <br><br><br>";
+          }
+
       } else {
-          $sql_select = "select * from `admin_user`";
-          $data = mysqli_query($conn,$sql_select);
-          $row = mysqli_fetch_assoc($data);
 
-      if($row == null) {
-        echo "There is no any data has been registered... Kindly register now first.... <br><br><br>";
-      } elseif($row['email'] != $email && $row['password'] != $password) {
-        echo "Entered Email and Password are incorrect... Please enter correct details in both... <br><br><br>";
-      } elseif($row['email'] != $email) {
-        echo "Entered Email is incorrect... Please enter correct email... <br><br><br>";
-      } else {
-        echo "Entered Password is incorrect... Please enter correct password... <br><br><br>";
+          // Check whether any admin is registered
+          $check = mysqli_query(
+              $conn,
+              "SELECT id FROM admin_user LIMIT 1"
+          );
+
+          if (mysqli_num_rows($check) == 0) {
+
+              echo "There is no any data registered... Kindly register first... <br><br><br>";
+
+          } else {
+
+              echo "Entered Email is incorrect... Please enter correct email... <br><br><br>";
+          }
       }
-    }
   }
 ?>
 <!DOCTYPE html>

@@ -21,6 +21,7 @@
 	    $env['DB_DATABASE'] ?? '',
 	    (int) ($env['DB_PORT'] ?? 3306)
 	);
+	
 	if (!$conn) {
 	    throw new RuntimeException('Database connection failed');
 	}

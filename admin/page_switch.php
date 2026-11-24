@@ -22,11 +22,19 @@
 	$blogTreeMenu = $blogActive = '';
 	$addBlogActive = $viewBlogActive = '';
 
-	$pageName = $pgTitle = $pgSlAction = $pgMsg = '';
+	$pageName = $pgTitle = $pgSlAction = $pgPrAction = $pgMsg = '';
 
-	$sid = '';
+	$sid = $pid = '';
 	// Switch Case
 	switch ($pgUrl) {
+		case 'catalog':
+	        require_once __DIR__.'/catalog-config.php';
+	        $catalogTable = $_GET['table'] ?? '';
+	        if (isset(CATALOG_TABLES[$catalogTable])) {
+	            $pageName = 'catalog-crud.php';
+	            $pgTitle = CATALOG_TABLES[$catalogTable];
+	        }
+	        break;
 
 	    // Dashboard
 	    case 'home':
@@ -85,6 +93,20 @@
 
 	    // Products
 	    case 'add-product':
+	    	if ((isset($_GET['pid'])) && (!empty($_GET['pid']))) {
+		      $pid = $_GET['pid'];
+		    } elseif ((isset($_POST['pId'])) && (!empty($_POST['pId']))) {
+		      $pid = $_POST['pId'];
+		    }
+
+		    if ((isset($_GET['prAction'])) && (!empty($_GET['prAction']))) {
+		      $pgPrAction = $_GET['prAction'];
+		    }
+
+		    if ((isset($_GET['msg'])) && (!empty($_GET['msg']))) {
+		      $pgMsg = $_GET['msg'];
+		    }
+
 	        $pageName = 'add-product.php';
 	        $pgTitle = 'Add Product';
 	        $productsTreeMenu = 'menu-open';
@@ -93,6 +115,20 @@
 	        break;
 
 	    case 'products':
+	    	if ((isset($_GET['pid'])) && (!empty($_GET['pid']))) {
+		      $pid = $_GET['pid'];
+		    } elseif ((isset($_POST['pId'])) && (!empty($_POST['pId']))) {
+		      $pid = $_POST['pId'];
+		    }
+
+		    if ((isset($_GET['prAction'])) && (!empty($_GET['prAction']))) {
+		      $pgPrAction = $_GET['prAction'];
+		    }
+
+		    if ((isset($_GET['msg'])) && (!empty($_GET['msg']))) {
+		      $pgMsg = $_GET['msg'];
+		    }
+
 	        $pageName = 'view-product.php';
 	        $pgTitle = 'Products';
 	        $productsTreeMenu = 'menu-open';

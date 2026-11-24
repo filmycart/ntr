@@ -353,7 +353,7 @@
 				
 				<div class="w-full">
 					<!-- <div class="header-cart-total w-full p-tb-40">
-						Total: Rs.<?php echo $total_price; ?>
+						Total: Rs.<?php //$total_price; ?>
 					</div> -->
 
 					<div class="header-cart-buttons flex-w w-full">

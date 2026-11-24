@@ -9,13 +9,13 @@
     $data_products = mysqli_query($conn,$sql_select_products);
     $products_count = mysqli_num_rows($data_products);
 
-    $sql_select_products_stock = "select * from `product` where `stock`='In Stock'";
+   /* $sql_select_products_stock = "select * from `product` where `stock`='In Stock'";
     $data_products_stock = mysqli_query($conn,$sql_select_products_stock);
-    $products_count_stock = mysqli_num_rows($data_products_stock);
+    $products_count_stock = mysqli_num_rows($data_products_stock);*/
 
-    $sql_select_products_out = "select * from `product` where `stock`='Out of Stock'";
+/*    $sql_select_products_out = "select * from `product` where `stock`='Out of Stock'";
     $data_products_out = mysqli_query($conn,$sql_select_products_out);
-    $products_count_out = mysqli_num_rows($data_products_out);
+    $products_count_out = mysqli_num_rows($data_products_out);*/
 
     $sql_select_blog = "select * from `blog`";
     $data_blog = mysqli_query($conn,$sql_select_blog);
@@ -51,52 +51,15 @@
                 <h3>
                   <?php echo $products_count; ?>
                 </h3>
-
-                <p>Total Products Updated</p>
+                <p>Total Products</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="view-product.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="admin.php?pg-url=products" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>
-                  <?php echo $products_count_stock; ?>
-                </h3>
-
-                <p>Products In-Stock</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="view-product.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>
-                  <?php echo $products_count_out; ?>
-                </h3>
-
-                <p>Products Out of Stocks</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="view-product.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-
-          
-
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-dark">
@@ -110,10 +73,9 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="contacted-us.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="admin.php?pg-url=contactus" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-danger">
@@ -127,7 +89,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="view-received-order.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="admin.php?pg-url=new-orders" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
@@ -144,7 +106,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="view-all-orders.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="admin.php?pg-url=all-orders" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
@@ -161,7 +123,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="view-all-orders.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="admin.php?pg-url=all-orders" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
@@ -178,7 +140,7 @@
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="view-slider.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="admin.php?pg-url=sliders" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
@@ -195,7 +157,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="view-blog.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="admin.php?pg-url=blogs" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

@@ -71,13 +71,95 @@
                   </li>
               </ul>
           </li>
-        </ul>
+        </ul>        
+        <!-- <ul
+            class="nav nav-pills nav-sidebar flex-column"
+            data-widget="treeview"
+            role="menu"
+            data-accordion="false"
+        >
+            <li class="nav-item <?= ($pgUrl ?? '') === 'catalog' ? 'menu-open' : '' ?>">
+                <a
+                    href="#"
+                    class="nav-link <?= ($pgUrl ?? '') === 'catalog' ? 'active' : '' ?>"
+                >
+                    <i class="nav-icon fas fa-boxes"></i>
+                    <p>Catalog
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a
+                            href="admin.php?pg-url=catalog&amp;table=product"
+                            class="nav-link"
+                        >
+                            <i class="far fas fa-box-open"></i>
+                            <p>Products</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            href="admin.php?pg-url=catalog&amp;table=product_categories"
+                            class="nav-link"
+                        >
+                            <i class="fas fa-list-alt"></i>
+                            <p>Categories</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            href="admin.php?pg-url=catalog&amp;table=attributes"
+                            class="nav-link"
+                        >
+                            <i class="fas fa-tags"></i>
+                            <p>Attributes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            href="admin.php?pg-url=catalog&amp;table=attribute_values"
+                            class="nav-link"
+                        >
+                            <i class="fas fa-tag"></i>
+                            <p>Attribute Values</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            href="admin.php?pg-url=catalog&amp;table=product_variants"
+                            class="nav-link"
+                        >
+                            <i class="fas fa-layer-group"></i>
+                            <p>Product Variants</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            href="admin.php?pg-url=catalog&amp;table=variant_attribute_values"
+                            class="nav-link"
+                        >
+                            <i class="fas fa-sliders-h"></i>
+                            <p>Variant Attributes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            href="admin.php?pg-url=catalog&amp;table=product_images"
+                            class="nav-link"
+                        >
+                            <i class="fas fa-images"></i>
+                            <p>Product Images</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul> -->
         <!-- Products -->        
         <ul class="nav nav-pills nav-sidebar flex-column"
             data-widget="treeview"
             role="menu"
             data-accordion="false">
-          <!-- Products -->
           <li class="nav-item <?=$productsTreeMenu ?>">
               <a href="#" class="nav-link <?= $productsActive ?>">
                   <i class="nav-icon fas fa-boxes"></i>
@@ -86,13 +168,6 @@
                   </p>
               </a>
               <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                      <a href="admin.php?pg-url=add-product"
-                         class="nav-link <?= $addProductActive ?>">
-                          <i class="nav-icon fas fa-plus-circle"></i>
-                          <p>Add Product</p>
-                      </a>
-                  </li>
                   <li class="nav-item">
                       <a href="admin.php?pg-url=products"
                          class="nav-link <?= $viewProductActive ?>">
