@@ -121,9 +121,33 @@
               <?php    
                 } elseif ($pgMsg == 3) {
               ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="icon fas fa-check-circle"></i>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="icon fas fa-exclamation-circle"></i>
                         <strong>Success!</strong>Product Deleted Successfully.
+
+                        <button type="button" class="close"
+                                data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              <?php
+                } elseif ($pgMsg == 4) {
+              ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="icon fas fa-exclamation-circle"></i>
+                        <strong>Error!</strong>Product slug already exists.
+                        <button type="button" class="close"
+                                data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+              <?php
+                } elseif ($pgMsg == 5) {
+              ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="icon fas fa-exclamation-circle"></i>
+                        <strong>Error!</strong>Product slug already exists.
+
                         <button type="button" class="close"
                                 data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -144,7 +168,8 @@
                     </div>                        
                     <div class="modal-body">
                       <form name="frmProduct" id="frmProduct" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="productAction" id="productAction" value="create">
+                        <input type="hidden" name="productId" id="productId" value="">
+                        <input type="hidden" name="productAction" id="productAction" value="">
                         <div class="row">
                             <div class="col-md-4 col-4">
                                 <div class="form-group">
@@ -355,148 +380,6 @@
                   <!-- /.modal-dialog -->
               </div>
               <!-- /.modal -->
-              <div class="modal fade" id="edit-product-modal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title"><span id="edit-product-modal-title"></span></h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>                        
-                    <div class="modal-body">
-                      <form name="frmEditProduct" id="frmEditProduct" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="productAction" id="productAction" value="update">
-                        <div class="row">
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                    <label>ID</label>
-                                    <input type="text" class="form-control" name="editProductId" id="editProductId" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                  <label>Name</label>
-                                  <input type="text" class="form-control" id="editProductName" name="editProductName">
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                    <label>Slug</label>
-                                    <input type="text" class="form-control" name="editProductSlug" id="editProductSlug">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                  <label>Type</label>
-                                  <input type="text" class="form-control" id="editProductType" name="editProductType">
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                  <label>Material</label>
-                                  <input type="text" class="form-control" id="editProductMaterial" name="editProductMaterial">
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                  <label>Weight</label>
-                                  <input type="text" class="form-control" id="editProductWeight" name="editProductWeight">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                  <label>Dimension</label>
-                                  <input type="text" class="form-control" id="editProductDimension" name="editProductDimension">
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-4">
-                              <div class="form-group">
-                                  <label>Category</label>
-                                  <div id="editProductCategoryList">
-                                      <span class="text-muted">
-                                          Loading Category...
-                                      </span>
-                                  </div>
-                                  <span id="editProductCategoryError" class="text-danger"></span>
-                              </div>
-                            </div>
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                  <label for="exampleInputFile">Image</label>
-                                  <div class="input-group"> 
-                                    <div class="custom-file">
-                                      <input type="file" class="custom-file-input" id="editSliderImage" name="editSliderImage" accept="image/*"
-                                        >
-                                      <label class="custom-file-label" for="editSliderImage">Choose image</label>
-                                    </div>
-                                  </div>
-                                </div>                                
-                            </div>                            
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                   <span id="editViewProductImageLink"></span>
-                                </div>
-                            </div>                                                       
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4 col-4">
-                              <div class="form-group">
-                                  <label class="d-block">Status</label>
-                                  <div class="form-check form-check-inline">
-                                      <input
-                                          class="form-check-input"
-                                          type="radio"
-                                          name="editProductStatus"
-                                          id="editProductStatusActive"
-                                          value="1">
-                                      <label class="form-check-label" for="productStatusActive">
-                                          Active
-                                      </label>
-                                  </div>
-                                  <div class="form-check form-check-inline">
-                                      <input
-                                          class="form-check-input"
-                                          type="radio"
-                                          name="editProductStatus"
-                                          id="editProductStatusInactive"
-                                          value="2"
-                                          checked>
-                                      <label class="form-check-label" for="productStatusInactive">
-                                          In-Active
-                                      </label>
-                                  </div>
-                              </div>
-                            </div>
-                        </div>  
-                        <div class="row">                            
-                            <div class="col-md-12 col-12">
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea rows="5" class="form-control" name="editProductDesc" id="editProductDesc"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-12">
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <button type="submit" id="btnUpdSubmit" name="btnUpdSubmit" class="btn btn-primary">Submit</button>
-                                  </div> 
-                                </div>
-                            </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                  <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-              </div>
               <div class="row justify-content-end">
                 <div class="col-md-2 col-12">
                   <div class="form-group">
@@ -547,7 +430,7 @@
                             <i class="fas fa-eye"></i>
                           </a>
                           <!-- Edit -->
-                          <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit-product-modal" title="Edit" onclick="editProduct('<?=$row['id']?>','edit')">
+                          <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#add-product-modal" title="Edit" onclick="editProduct('<?=$row['id']?>','edit')">
                             <i class="fas fa-edit"></i>
                           </a>
                           <!-- Delete -->
@@ -707,12 +590,11 @@
                 action: pAction
             },
             beforeSend: function () {
-                $('#editProductCategoryList').html(
+                $('#productCategoryList').html(
                     '<span>Loading categories...</span>'
                 );
             },
             success: function (response) {
-
                 if (response.status !== 'success') {
                     alert(response.message || 'Product not found');
                     return;
@@ -722,15 +604,15 @@
                 const categories = response.data.categories || [];
 
                 // Set product details
-                $('#editProductId').val(product.id);
-                $('#editProductName').val(product.name);
-                $('#editProductDesc').val(product.description);
-                $('#editProductSlug').val(product.slug);
-                $('#editProductType').val(product.type);
-                $('#editProductMaterial').val(product.material);
-                $('#editProductWeight').val(product.weight);
-                $('#editProductDimension').val(product.dimension);
-                $('#editProductCategory').text(product.category_names);
+                $('#productId').val(product.id);
+                $('#productName').val(product.name);
+                $('#productDesc').val(product.description);
+                $('#productSlug').val(product.slug);
+                $('#productType').val(product.type);
+                $('#productMaterial').val(product.material);
+                $('#productWeight').val(product.weight);
+                $('#productDimension').val(product.dimension);
+                $('#productCategory').text(product.category_names);
 
                 // Set modal title
                 $('#edit-product-modal-title').text(' ' + product.name);
@@ -742,7 +624,7 @@
                     .filter(Boolean);
 
                 // Load category checkboxes
-                const container = $('#editProductCategoryList');
+                const container = $('#productCategoryList');
 
                 container.empty();
                 if (categories.length === 0) {
@@ -750,7 +632,7 @@
                 } else {
                     $.each(categories, function (index, category) {
                         const checkboxId =
-                            'editProductCategory_' + category.id;
+                            'productCategory_' + category.id;
 
                         const wrapper = $('<div>', {
                             class: 'custom-control custom-checkbox mb-2'
@@ -760,7 +642,7 @@
                             type: 'checkbox',
                             class: 'custom-control-input',
                             id: checkboxId,
-                            name: 'editProductCategory[]',
+                            name: 'productCategoryList[]',
                             value: category.id
                         });
 
@@ -782,12 +664,11 @@
                 }
 
                 // Set current product image
-                const imageContainer = $('#editViewProductImageLink');
+                const imageContainer = $('#viewProductImageLink');
 
                 imageContainer.empty();
 
                 if (product.image) {
-
                     const imagePath =
                         'image/products/' +
                         encodeURIComponent(product.image);
@@ -807,7 +688,7 @@
                 }
 
                 // Set product status
-                $('input[name="editProductStatus"]')
+                $('input[name="productStatus"]')
                     .prop('checked', false)
                     .filter(function () {
                         return this.value === String(product.status);
@@ -815,24 +696,76 @@
                     .prop('checked', true);
 
                 // Open edit product modal
-                $('#edit-product-modal').modal('show');
+                $('#add-product-modal').modal('show');
+                
+                pAction = 'update';
+                $('#productAction').val(pAction);
             },
             error: function (xhr, status, error) {
-
-                $('#editProductCategoryList').text(
+                $('#productCategoryList').text(
                     'Unable to load categories'
                 );
 
                 console.error('AJAX Error:', error);
-
                 alert('Something went wrong');
             }
         });
+      } else if(pAction == 'update'){
+          // Get form element
+          var form = $('#frmProduct')[0];
+          if (!form) {
+              console.error('Product form not found');
+              return;
+          }
+
+          var formData = new FormData(form);
+          var submitBtn = $('#btnSubmit');
+
+          $.ajax({
+            url: 'product-src.php',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                submitBtn.prop('disabled', true)
+                         .text('Updating...');
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    $('#add-product-modal').modal('hide');
+                    window.location.href =
+                        'admin.php?pg-url=products&msg=2';
+                } else {
+                    $('#add-product-modal').modal('hide');
+                    window.location.href =
+                        'admin.php?pg-url=products&msg=5';
+                }
+            },
+            complete: function () {
+                submitBtn.prop('disabled', false)
+                         .text('Submit');
+            }
+        });
       }
-  }
+    }
 
     function addProduct(sAction) {
       if (sAction === 'add') {
+        $('#productId').val('');
+        $('#productAction').val('');
+        $('#productName').val('');
+        $('#productSlug').val('');
+        $('#productType').val('');
+        $('#productMaterial').val('');
+        $('#productWeight').val('');
+        $('#productDimension').val('');
+        $('#productDesc').val('');
+        $('#productCategory').val('');                    
+
+        $('#productAction').val('create');
+
         $.ajax({
             url: 'product-src.php',
             type: 'GET',
@@ -887,6 +820,10 @@
                         response.message || 'Unable to load categories'
                     );
                 }
+
+                pAction = 'create';
+
+                $('#productAction').val(pAction);
             },
             error: function (xhr, status, error) {
                 $('#productCategoryList').text(
@@ -899,20 +836,14 @@
 
       if(sAction == 'create'){
           // Get form element
-          var form = $('#frmAddProduct')[0];
+          var form = $('#frmProduct')[0];
           if (!form) {
               console.error('Product form not found');
               return;
           }
 
           var formData = new FormData(form);
-          var submitBtn = $('#btnAddSubmit');
-
-          //Disabled inputs are excluded from FormData
-          formData.set('productName', $('#productName').val());
-          formData.set('productDescription', $('#productDescription').val());
-          formData.set('productStatus', $('#productStatus').val());
-          //formData.set('sliderFile', $('#sliderFile').val());
+          var submitBtn = $('#btnSubmit');
 
           $.ajax({
             url: 'product-src.php',
@@ -927,11 +858,13 @@
             },
             success: function (response) {
                 if (response.status === 'success') {
-                    $('#add-slider-modal').modal('hide');
+                    $('#add-product-modal').modal('hide');
                     window.location.href =
-                        'admin.php?pg-url=sliders&msg=1';
+                        'admin.php?pg-url=products&msg=2';
                 } else {
-                    alert(response.message || 'Update failed');
+                    $('#add-product-modal').modal('hide');
+                    window.location.href =
+                        'admin.php?pg-url=products&msg=4';
                 }
             },
             complete: function () {
@@ -956,171 +889,128 @@
 
         //Initialize validation
         var validator = $('#frmProduct').validate({
-        rules: {
-          productName: {
+          rules: {
+            productName: {
+                required: true,
+                minlength: 3,
+                maxlength: 100
+            },
+            productSlug: {
+                required: true,
+                minlength: 3,
+                maxlength: 30
+            },
+            productType: {
+                required: true,
+                minlength: 3,
+                maxlength: 30
+            },
+            productMaterial: {
+                required: true,
+                minlength: 3,
+                maxlength: 30
+            },
+            productWeight: {
+                required: true,
+                minlength: 2,
+                maxlength: 5,
+                number: true
+            },
+            productDimension: {
+                required: true,
+                minlength: 2,
+                maxlength: 5
+            },
+            productDesc: {
+                required: true,
+                minlength: 10,
+                maxlength: 500
+            },
+            'productCategory[]': {
               required: true,
-              minlength: 3,
-              maxlength: 100
-          },
-          productSlug: {
+              minCategory: 1
+            }/*,
+            productImage: {
               required: true,
-              minlength: 3,
-              maxlength: 30
+              extension: "jpg|jpeg|png|webp"
+            }*/
           },
-          productType: {
-              required: true,
-              minlength: 3,
-              maxlength: 30
+          messages: {
+            productName: {
+                required: "Please enter name",
+                minlength: "Minimum 3 characters required",
+                maxlength: "Maximum 100 characters allowed"
+            },
+            productSlug: {
+                required: "Please enter slug",
+                minlength: "Minimum 3 characters required",
+                maxlength: "Maximum 30 characters allowed"
+            },
+            productType: {
+                required: "Please enter type",
+                minlength: "Minimum 3 characters required",
+                maxlength: "Maximum 10 characters allowed"
+            },
+            productMaterial: {
+                required: "Please enter material",
+                minlength: "Minimum 3 characters required",
+                maxlength: "Maximum 30 characters allowed"
+            },
+            productWeight: {
+                required: "Please enter weight",
+                minlength: "Minimum 2 characters required",
+                maxlength: "Maximum 5 characters allowed",
+                number: 'Please enter only number'
+            },
+            productDimension: {
+                required: "Please enter dimension",
+                minlength: "Minimum 2 characters required",
+                maxlength: "Maximum 5 characters allowed"
+            },
+            productDesc: {
+                required: "Please enter description",
+                minlength: "Minimum 10 characters required",
+                maxlength: "Maximum 500 characters allowed"
+            },
+            'productCategory[]': {
+              required: 'Please select at least one category',
+              minCategory: 'Please select at least one category'
+            }/*,
+            productImage: {
+              required: "Please select an image",
+              extension: "Only JPG, JPEG, PNG and WEBP images allowed"
+            }*/
           },
-          productMaterial: {
-              required: true,
-              minlength: 3,
-              maxlength: 30
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+              if (element.attr('name') === 'productCategory[]') {
+                  error.addClass('text-danger');
+                  error.appendTo('#productCategoryError');
+              } else if (element.attr('type') === 'file') {
+                  error.addClass('invalid-feedback');
+                  error.insertAfter(element.closest('.input-group'));
+              } else {
+                  error.addClass('invalid-feedback');
+                  error.insertAfter(element);
+              }
           },
-          productWeight: {
-              required: true,
-              minlength: 2,
-              maxlength: 5,
-              number: true
+          highlight: function (element) {
+              $(element).addClass('is-invalid');
           },
-          productDimension: {
-              required: true,
-              minlength: 2,
-              maxlength: 5
+          unhighlight: function (element) {
+              $(element).removeClass('is-invalid');
           },
-          productDesc: {
-              required: true,
-              minlength: 10,
-              maxlength: 500
-          },
-          'productCategory[]': {
-            required: true,
-            minCategory: 1
-          },
-          productImage: {
-            required: true,
-            extension: "jpg|jpeg|png|webp"
-          }
-        },
-        messages: {
-          productName: {
-              required: "Please enter name",
-              minlength: "Minimum 3 characters required",
-              maxlength: "Maximum 100 characters allowed"
-          },
-          productSlug: {
-              required: "Please enter slug",
-              minlength: "Minimum 3 characters required",
-              maxlength: "Maximum 30 characters allowed"
-          },
-          productType: {
-              required: "Please enter type",
-              minlength: "Minimum 3 characters required",
-              maxlength: "Maximum 10 characters allowed"
-          },
-          productMaterial: {
-              required: "Please enter material",
-              minlength: "Minimum 3 characters required",
-              maxlength: "Maximum 30 characters allowed"
-          },
-          productWeight: {
-              required: "Please enter weight",
-              minlength: "Minimum 2 characters required",
-              maxlength: "Maximum 5 characters allowed",
-              number: 'Please enter only number'
-          },
-          productDimension: {
-              required: "Please enter dimension",
-              minlength: "Minimum 2 characters required",
-              maxlength: "Maximum 5 characters allowed"
-          },
-          productDesc: {
-              required: "Please enter description",
-              minlength: "Minimum 10 characters required",
-              maxlength: "Maximum 500 characters allowed"
-          },
-          'productCategory[]': {
-            required: 'Please select at least one category',
-            minCategory: 'Please select at least one category'
-          },
-          productImage: {
-            required: "Please select an image",
-            extension: "Only JPG, JPEG, PNG and WEBP images allowed"
-          }
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            if (element.attr('name') === 'productCategory[]') {
-                error.addClass('text-danger');
-                error.appendTo('#productCategoryError');
-            } else if (element.attr('type') === 'file') {
-                error.addClass('invalid-feedback');
-                error.insertAfter(element.closest('.input-group'));
+          submitHandler: function (form, event) {
+            const productAction = $('#productAction').val();
+            const productId = $('#productId').val();
+
+            if (productAction === 'create') {
+                addProduct('create');
+            } else if (productAction === 'update') {
+                editProduct(productId, 'update');
             } else {
-                error.addClass('invalid-feedback');
-                error.insertAfter(element);
+                console.error('Invalid product action:', productAction);
             }
-        },
-        highlight: function (element) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element) {
-            $(element).removeClass('is-invalid');
-        },
-        submitHandler: function (form, event) {
-            if (event) {
-                event.preventDefault();
-            }
-
-            // Count selected categories
-            var categoryCount = $(form)
-                .find('input[name="productCategory[]"]:checked')
-                .length;
-
-            // Additional validation if categories are not loaded
-            if (categoryCount === 0) {
-                $('#productCategoryError').text(
-                    'Please select at least one category'
-                );
-                return false;
-            }
-
-            var formData = new FormData(form);
-            var submitBtn = $('#btnSubmit');
-
-            $.ajax({
-                url: 'product-src.php',
-                type: 'POST',
-                data: formData,
-                dataType: 'json',
-                processData: false,
-                contentType: false,
-                beforeSend: function () {
-                    submitBtn
-                        .prop('disabled', true)
-                        .text('Creating...');
-                },
-                success: function (response) {
-                    if (response.status === 'success') {
-                        $('#add-product-modal').modal('hide');
-                        window.location.href =
-                            'admin.php?pg-url=products&msg=1';
-                    } else {
-                        alert(
-                            response.message || 'Product creation failed'
-                        );
-                    }
-                },
-                error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('Something went wrong');
-                },
-                complete: function () {
-                    submitBtn
-                        .prop('disabled', false)
-                        .text('Submit');
-                }
-            });
 
             return false;
           }
@@ -1148,172 +1038,6 @@
             var filename = this.files.length
                 ? this.files[0].name
                 : 'Choose Image';
-            $(this).next('.custom-file-label').text(filename);
-        });      
-
-        //Initialize validation once        
-        $(document).ready(function () {
-            $('#frmEditProduct').validate({
-                rules: {
-                    editProductName: {
-                        required: true,
-                        minlength: 3,
-                        maxlength: 100
-                    },
-                    editProductSlug: {
-                        required: true,
-                        minlength: 3,
-                        maxlength: 30
-                    },
-                    productMaterial: {
-                        required: true,
-                        minlength: 3,
-                        maxlength: 10
-                    },
-                    productWeight: {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 5
-                    },
-                    editProductDesc: {
-                        required: true,
-                        minlength: 10,
-                        maxlength: 500
-                    },
-                },
-                messages: {
-                    editProductName: {
-                        required: "Please enter name",
-                        minlength: "Minimum 3 characters required",
-                        maxlength: "Maximum 100 characters allowed"
-                    },
-                    editProductSlug: {
-                        required: "Please enter slug",
-                        minlength: "Minimum 3 characters required",
-                        maxlength: "Maximum 30 characters allowed"
-                    },
-                    productMaterial: {
-                        required: "Please enter material",
-                        minlength: "Minimum 3 characters required",
-                        maxlength: "Maximum 10 characters allowed"
-                    },
-                    productWeight: {
-                        required: "Please enter weight",
-                        minlength: "Minimum 2 characters required",
-                        maxlength: "Maximum 5 characters allowed"
-                    },
-                    editProductDesc: {
-                        required: "Please enter description",
-                        minlength: "Minimum 10 characters required",
-                        maxlength: "Maximum 500 characters allowed"
-                    }
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-
-                    if (element.attr('type') === 'file') {
-                        error.insertAfter(
-                            element.closest('.input-group')
-                        );
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
-
-                highlight: function (element) {
-                    $(element).addClass('is-invalid');
-                },
-
-                unhighlight: function (element) {
-                    $(element).removeClass('is-invalid');
-                },
-
-                submitHandler: function (form, event) {
-
-                    if (event) {
-                        event.preventDefault();
-                    }
-
-                    var formData = new FormData(form);
-
-                    // Use the submit button inside this form
-                    var submitBtn = $(form).find(
-                        'button[type="submit"]'
-                    );
-
-                    var originalText = submitBtn.text();
-
-                    // Include product ID
-                    formData.set(
-                        'productId',
-                        $('#editProductId').val()
-                    );
-
-                    // Set the update action expected by PHP
-                    // formData.set('action', 'update');
-
-                    $.ajax({
-                        url: 'product-src.php',
-                        type: 'POST',
-                        data: formData,
-                        dataType: 'json',
-                        processData: false,
-                        contentType: false,
-
-                        beforeSend: function () {
-                            submitBtn
-                                .prop('disabled', true)
-                                .text('Updating...');
-                        },
-
-                        success: function (response) {
-
-                            if (response.status === 'success') {
-
-                                $('#edit-product-modal').modal('hide');
-
-                                window.location.href =
-                                    'admin.php?pg-url=catalog&table=product&msg=2';
-
-                            } else {
-                                alert(
-                                    response.message || 'Update failed'
-                                );
-                            }
-                        },
-
-                        error: function (xhr) {
-                            console.error(
-                                'Product update error:',
-                                xhr.responseText
-                            );
-
-                            alert(
-                                'Something went wrong while updating product.'
-                            );
-                        },
-
-                        complete: function () {
-                            submitBtn
-                                .prop('disabled', false)
-                                .text(originalText);
-                        }
-                    });
-
-                    return false;
-                }
-            });
-
-        });
-
-
-        // Display selected image filename
-        $('#sliderImage').on('change', function () {
-            var filename = this.files.length
-                ? this.files[0].name
-                : 'Choose image';
-
             $(this).next('.custom-file-label').text(filename);
         });
     });
