@@ -66,7 +66,8 @@
     $productCategory = $_POST['productCategory'];
     $productDimension = $_POST['productDimension'];
     $productDesc = $_POST['productDesc'];
-    $productStatus = $_POST['productStatus'];
+
+    $productStatus = (int) $_POST['productStatus'];
 
     $productCategoryStr = "";
     if(!empty($productCategory)){
@@ -274,50 +275,107 @@
         }
         mysqli_stmt_close($stmt);
   } elseif($pgAction === 'update' && $pgid) {
-    $stmt = mysqli_prepare(
-        $conn,
-        "SELECT id, title, `desc`, status, image
-         FROM slider
-         WHERE id = ?"
-    );
+        $stmt = mysqli_prepare(
+                $conn,
+                "SELECT
+                    p.*,
+                    GROUP_CONCAT(
+                        DISTINCT pi.image
+                        ORDER BY pi.image
+                        SEPARATOR ','
+                    ) AS images,
+                    GROUP_CONCAT(
+                        DISTINCT pc.name
+                        ORDER BY pc.id
+                        SEPARATOR ', '
+                    ) AS category_names
+                FROM product AS p
+                LEFT JOIN product_images AS pi
+                    ON p.id = pi.product_id
+                LEFT JOIN product_categories AS pc
+                    ON FIND_IN_SET(pc.id, p.category_id) > 0
+                WHERE p.id = ?
+                GROUP BY p.id"
+            );
 
-    mysqli_stmt_bind_param($stmt, "i", $pgid);
-    mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_param($stmt, "i", $pgid);
+        mysqli_stmt_execute($stmt);
 
-    $result = mysqli_stmt_get_result($stmt);
-    $row = mysqli_fetch_assoc($result);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
 
-    $sliderTitle = $_POST['editSliderTitle'];
-    $sliderDesc = $_POST['editSliderDesc'];
-    $sliderStatus = $_POST['editSliderStatus'];
-    $sliderImage = $_FILES['editSliderImage']['name'];
+        $productName = $_POST['productName'];
+        $productSlug = $_POST['productSlug'];
+        $productType = $_POST['productType'];
+        $productMaterial = $_POST['productMaterial'];
+        $productWeight = $_POST['productWeight'];
+        $productDimension = $_POST['productDimension'];
+        $productDesc = $_POST['productDesc'];
+        $productStatus = $_POST['productStatus'];
 
-    if ($sliderImage=="") {
-        $sliderImage = $row['image'];
-    } else {
-        $imagePath = 'image/products/' . $row['image'];
-
-        if (!empty($row['image']) && is_file($imagePath)) {
-            unlink($imagePath);
+        $productCategory = $_POST['productCategoryList'];        
+        $productCategoryStr = "";
+        if(!empty($productCategory)){
+            $productCategoryStr = implode(",",$productCategory);
         }
 
-        $extension = strtolower(
-          pathinfo($_FILES['editSliderImage']['name'], PATHINFO_EXTENSION)
-        );
-        
-        $sliderImage = bin2hex(random_bytes(4)) . '.' . $extension;
-        $path = 'image/' . $sliderImage;
-        move_uploaded_file($_FILES['editSliderImage']['tmp_name'],$path);
-    }
+        if((isset($_FILES['productImage']['name'])) && (!empty($_FILES['productImage']['name']))) {
 
-    $sql_update = "UPDATE `slider` SET `title`='$sliderTitle',`desc`='$sliderDesc',`image`='$sliderImage',`status`='$sliderStatus',`updated_by` = ".$_SESSION['login_id'].",`updated_at`= NOW() where `id`='$pgid'";
-    mysqli_query($conn,$sql_update);
+            $imagePath = 'image/products/' . $row['images'];
 
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'Product fetched successfully.',
-        'data' => $row
-    ]);
+            if (!empty($row['images']) && is_file($imagePath)) {
+                unlink($imagePath);
+            }
+
+            $extension = strtolower(
+                pathinfo($_FILES['productImage']['name'], PATHINFO_EXTENSION)
+            );
+            
+            $productImage = bin2hex(random_bytes(4)) . '.' . $extension;
+            $path = 'image/products/' . $_FILES['productImage']['name'];
+            move_uploaded_file($_FILES['productImage']['tmp_name'],$path);
+        } else {
+            $productImage = $row['images'];
+        }
+
+        $updatedBy = (int) $_SESSION['login_id'];
+
+        $sql = "SELECT * FROM product WHERE slug = ? AND id != ?";
+
+        $stmt = mysqli_prepare($conn, $sql);
+
+        mysqli_stmt_bind_param($stmt, "si", $productSlug, $pgid);
+
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+
+        mysqli_stmt_close($stmt);
+
+        if(!empty($row)){
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Product slug already exist'
+            ]);
+        } else {
+            $sql_update = "UPDATE `product` SET `name`='$productName',`slug`='$productSlug',`type`='$productType',`material`='$productMaterial',`weight`='$productWeight',`dimension`='$productDimension',`description`='$productDesc',`status`='$productStatus',`category_id`='$productCategoryStr',`updated_by` = ".$updatedBy.",`updated_at`= NOW() WHERE `id`='$pgid'";        
+       
+            mysqli_query($conn,$sql_update);
+
+            if ($sql_update) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Product Updated successfully.',
+                    'data' => $row
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Product not found'
+                ]);
+            }
+        }
   } else {
       echo json_encode([
           'status' => 'error',
