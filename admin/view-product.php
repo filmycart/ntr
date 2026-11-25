@@ -669,7 +669,7 @@
                 }
 
                 // Load existing product images
-                const imageContainer = $('#productImagePreview');
+                /*const imageContainer = $('#productImagePreview');
 
                 imageContainer.empty();
 
@@ -727,6 +727,80 @@
                             class: 'col-12 text-muted'
                         }).text('No images available')
                     );
+                }*/
+
+                const imageContainer = $('#productImagePreview');
+
+                imageContainer.empty();
+
+                if (images.length > 0) {
+
+                    $.each(images, function (index, image) {
+
+                        const imagePath =
+                            'image/products/' +
+                            encodeURIComponent(image.image);
+
+                        const wrapper = $('<div>', {
+                            class: 'col-md-6 col-sm-6 col-6 mb-6'
+                        });
+
+                        const imageCard = $('<div>', {
+                            class: 'border rounded p-2 text-center h-100'
+                        });
+
+                        const imageElement = $('<img>', {
+                            src: imagePath,
+                            alt: image.image,
+                            class: 'img-thumbnail'
+                        }).css({
+                            width: '100%',
+                            height: '130px',
+                            objectFit: 'contain'
+                        });
+
+                        const imageLink = $('<a>', {
+                            href: imagePath,
+                            target: '_blank',
+                            rel: 'noopener noreferrer'
+                        }).append(imageElement);
+
+                        const radioId = 'primaryImage_' + image.id;
+
+                        const radioWrapper = $('<div>', {
+                            class: 'custom-control custom-radio mt-2'
+                        });
+
+                        const radio = $('<input>', {
+                            type: 'radio',
+                            class: 'custom-control-input primary-image-radio',
+                            name: 'primaryImage',
+                            id: radioId,
+                            value: image.id
+                        }).prop(
+                            'checked',
+                            String(image.is_primary) === '1'
+                        );
+
+                        radio.on('change', function () {
+                            setPrimaryImage(product.id, image.id);
+                        });
+
+                        const label = $('<label>', {
+                            class: 'custom-control-label',
+                            for: radioId
+                        }).text('Primary');
+
+                        radioWrapper.append(radio, label);
+
+                        imageCard.append(imageLink, radioWrapper);
+
+                        wrapper.append(imageCard);
+                        imageContainer.append(wrapper);
+                    });
+
+                } else {
+                    imageContainer.text('No images available');
                 }
 
                 // Set product status
