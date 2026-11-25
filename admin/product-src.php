@@ -145,48 +145,91 @@
         }
     }    
   }elseif ($pgAction === 'edit' && $pgid) {
-    $stmt = mysqli_prepare(
-                $conn,
-                "SELECT
-                    p.*,
-                    GROUP_CONCAT(
-                        DISTINCT pi.image
-                        ORDER BY pi.image
-                        SEPARATOR ','
-                    ) AS images,
-                    GROUP_CONCAT(
-                        DISTINCT pc.name
-                        ORDER BY pc.id
-                        SEPARATOR ', '
-                    ) AS category_names
-                FROM product AS p
-                LEFT JOIN product_images AS pi
-                    ON p.id = pi.product_id
-                LEFT JOIN product_categories AS pc
-                    ON FIND_IN_SET(pc.id, p.category_id) > 0
-                WHERE p.id = ?
-                GROUP BY p.id"
+
+        $data = array();
+
+        if ($pgAction === 'edit') {
+
+            header('Content-Type: application/json; charset=utf-8');
+
+            $catsql = "SELECT
+                id,
+                parent_id,
+                name,
+                slug,
+                status
+                FROM product_categories
+                WHERE status = 1
+                ORDER BY name ASC";
+
+            $catresult = mysqli_query($conn, $catsql);
+
+            if ($catresult === false) {
+                http_response_code(500);
+
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => 'Unable to fetch categories'
+                ]);
+                exit;
+            }
+
+            $categories = mysqli_fetch_all(
+                $catresult,
+                MYSQLI_ASSOC
             );
 
-    mysqli_stmt_bind_param($stmt, "i", $pgid);
-    mysqli_stmt_execute($stmt);
+            $stmt = mysqli_prepare(
+                    $conn,
+                    "SELECT
+                        p.*,
+                        GROUP_CONCAT(
+                            DISTINCT pi.image
+                            ORDER BY pi.image
+                            SEPARATOR ','
+                        ) AS images,
+                        GROUP_CONCAT(
+                            DISTINCT pc.name
+                            ORDER BY pc.id
+                            SEPARATOR ', '
+                        ) AS category_names
+                    FROM product AS p
+                    LEFT JOIN product_images AS pi
+                        ON p.id = pi.product_id
+                    LEFT JOIN product_categories AS pc
+                        ON FIND_IN_SET(pc.id, p.category_id) > 0
+                    WHERE p.id = ?
+                    GROUP BY p.id"
+                );
 
-    $result = mysqli_stmt_get_result($stmt);
-    $row = mysqli_fetch_assoc($result);
+            mysqli_stmt_bind_param($stmt, "i", $pgid);
+            mysqli_stmt_execute($stmt);
 
-    if ($row) {
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Product fetched successfully',
-            'data' => $row
-        ]);
-    } else {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Product not found'
-        ]);
-    }
-    mysqli_stmt_close($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $row = mysqli_fetch_assoc($result);
+
+            if(!empty($row)){
+                $data['product'] = $row;
+            }
+
+            if(!empty($categories)){
+                $data['categories'] = $categories;
+            }
+
+            if ($row) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Product fetched successfully',
+                    'data' => $data
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Product not found'
+                ]);
+            }
+            mysqli_stmt_close($stmt);    
+        }        
   } elseif ($pgAction === 'view' && $pgid) {
         $stmt = mysqli_prepare(
                 $conn,

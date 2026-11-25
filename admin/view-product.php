@@ -415,6 +415,17 @@
                                 </div>
                             </div>
                             <div class="col-md-4 col-4">
+                              <div class="form-group">
+                                  <label>Category</label>
+                                  <div id="editProductCategoryList">
+                                      <span class="text-muted">
+                                          Loading Category...
+                                      </span>
+                                  </div>
+                                  <span id="editProductCategoryError" class="text-danger"></span>
+                              </div>
+                            </div>
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
                                   <label for="exampleInputFile">Image</label>
                                   <div class="input-group"> 
@@ -685,6 +696,8 @@
     }
 
     function editProduct(pId, pAction) {
+
+      if (pAction === 'edit') {
         $.ajax({
             url: 'product-src.php',
             type: 'GET',
@@ -693,52 +706,130 @@
                 id: pId,
                 action: pAction
             },
-            success: function (response) {
-                if (response.status === 'success') {
-                    $('#editProductId').val(response.data.id);
-                    $('#editProductName').val(response.data.name);
-                    $('#editProductDesc').val(response.data.description);
-                    $('#editProductSlug').val(response.data.slug);
-                    $('#editProductType').val(response.data.type);
-                    $('#editProductMaterial').val(response.data.material);
-                    $('#editProductWeight').val(response.data.weight);
-                    $('#editProductDimension').val(response.data.dimension);
-                    $('#editProductCategory').html(response.data.category_names);
-
-                    $('#edit-product-modal-title').html(" "+response.data.name);
-
-                    // Set current product image
-                    var productImage = response.data.image;
-
-                    var imageLinkHtml = '';
-
-                    if (productImage) {
-                        var imagePath = window.location.origin + '/ntr/admin/image/products/' + productImage;
-                        imageLinkHtml = '<label for="exampleInputFile">Image</label><div><a href="'+imagePath+'" target="_blank">'+productImage+'</a></div>';
-
-                        $('#editViewProductImageLink').html(imageLinkHtml);
-                    } else {
-                        imageLinkHtml = '';
-                        $('#editViewProductImageLink').html(imageLinkHtml);
-                    }
-
-                    // Set status radio button
-                    var productStatus = response.data.status;
-
-                    $('input[name="editProductStatus"]')
-                        .prop('checked', false);
-
-                    $('input[name="editProductStatus"][value="' + productStatus + '"]')
-                        .prop('checked', true);
-                } else {
-                    alert(response.message || 'Product not found');
-                }
+            beforeSend: function () {
+                $('#editProductCategoryList').html(
+                    '<span>Loading categories...</span>'
+                );
             },
-            error: function (xhr) {
+            success: function (response) {
+
+                if (response.status !== 'success') {
+                    alert(response.message || 'Product not found');
+                    return;
+                }
+
+                const product = response.data.product;
+                const categories = response.data.categories || [];
+
+                // Set product details
+                $('#editProductId').val(product.id);
+                $('#editProductName').val(product.name);
+                $('#editProductDesc').val(product.description);
+                $('#editProductSlug').val(product.slug);
+                $('#editProductType').val(product.type);
+                $('#editProductMaterial').val(product.material);
+                $('#editProductWeight').val(product.weight);
+                $('#editProductDimension').val(product.dimension);
+                $('#editProductCategory').text(product.category_names);
+
+                // Set modal title
+                $('#edit-product-modal-title').text(' ' + product.name);
+
+                // Get selected category IDs
+                const selectedCategories = String(product.category_id || '')
+                    .split(',')
+                    .map(id => id.trim())
+                    .filter(Boolean);
+
+                // Load category checkboxes
+                const container = $('#editProductCategoryList');
+
+                container.empty();
+                if (categories.length === 0) {
+                    container.text('No categories available');
+                } else {
+                    $.each(categories, function (index, category) {
+                        const checkboxId =
+                            'editProductCategory_' + category.id;
+
+                        const wrapper = $('<div>', {
+                            class: 'custom-control custom-checkbox mb-2'
+                        });
+
+                        const checkbox = $('<input>', {
+                            type: 'checkbox',
+                            class: 'custom-control-input',
+                            id: checkboxId,
+                            name: 'editProductCategory[]',
+                            value: category.id
+                        });
+
+                        // Check already selected categories
+                        checkbox.prop(
+                            'checked',
+                            selectedCategories.includes(String(category.id))
+                        );
+
+                        const label = $('<label>', {
+                            class: 'custom-control-label',
+                            for: checkboxId
+                        }).text(category.name);
+
+                        wrapper.append(checkbox, label);
+
+                        container.append(wrapper);
+                    });
+                }
+
+                // Set current product image
+                const imageContainer = $('#editViewProductImageLink');
+
+                imageContainer.empty();
+
+                if (product.image) {
+
+                    const imagePath =
+                        'image/products/' +
+                        encodeURIComponent(product.image);
+
+                    const imageLabel = $('<label>').text('Image');
+
+                    const imageLink = $('<a>', {
+                        href: imagePath,
+                        target: '_blank',
+                        rel: 'noopener noreferrer'
+                    }).text(product.image);
+
+                    imageContainer.append(
+                        imageLabel,
+                        $('<div>').append(imageLink)
+                    );
+                }
+
+                // Set product status
+                $('input[name="editProductStatus"]')
+                    .prop('checked', false)
+                    .filter(function () {
+                        return this.value === String(product.status);
+                    })
+                    .prop('checked', true);
+
+                // Open edit product modal
+                $('#edit-product-modal').modal('show');
+            },
+            error: function (xhr, status, error) {
+
+                $('#editProductCategoryList').text(
+                    'Unable to load categories'
+                );
+
+                console.error('AJAX Error:', error);
+
                 alert('Something went wrong');
             }
         });
-    }
+      }
+  }
 
     function addProduct(sAction) {
       if (sAction === 'add') {
@@ -804,7 +895,7 @@
             }
         });
         return;
-      }      
+      }   
 
       if(sAction == 'create'){
           // Get form element
