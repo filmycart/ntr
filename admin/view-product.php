@@ -79,39 +79,6 @@
   // Fetch all products
   $sql_select = "SELECT * FROM `product` ORDER BY id DESC";
   $data = mysqli_query($conn, $sql_select);
-
-  /*$sql_select = "select * from `product`";
-  $data = mysqli_query($conn,$sql_select);
-
-  if((!empty($pgPrAction)) && (!empty($pid)) && ($pgPrAction == 'delete')){
-      $sql_select_img = "SELECT * FROM `product` WHERE `id`='$pid'";
-      $data_img = mysqli_query($conn,$sql_select_img);
-      $row = mysqli_fetch_assoc($data_img);
-
-      $sql_delete = "delete from `product` where `id`='$pid'";
-      mysqli_query($conn,$sql_delete);
-
-      $sql_prod_select_img = "SELECT image FROM `product_images` WHERE `product_id`='$pid'";
-      $data_img_arr = mysqli_query($conn,$sql_prod_select_img);
-      $row_img = mysqli_fetch_assoc($data_img_arr);
-
-      print"<pre>";
-      print_r($row_img);
-      exit;
-
-      $delete_img_arr = $row_img['image'];
-
-      $delimagePath = 'image/products/' . $delete_img;
-
-      if (!empty($delete_img) && is_file($delimagePath)) {
-        unlink($delimagePath);
-      }
-
-      $sql_delete = "delete from `product` where `id`='$sid'";
-      mysqli_query($conn,$sql_delete);
-
-      header('location:admin.php?pg-url=products&msg=3');
-  }*/
 ?>
   <!-- DataTables -->
   <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -210,7 +177,15 @@
                                   <label>Weight</label>
                                   <input type="text" class="form-control" id="productWeight" name="productWeight">
                                 </div>
-                            </div>                        
+                            </div>
+                            <div class="col-md-4 col-4">
+                                <div class="form-group">
+                                  <label>Dimension</label>
+                                  <input type="text" class="form-control" id="productDimension" name="productDimension">
+                                </div>
+                            </div>
+                          </div>
+                          <div class="row">
                             <div class="col-md-4 col-4">
                               <div class="form-group">
                                   <label>Category</label>
@@ -222,14 +197,6 @@
                                   <span id="productCategoryError" class="text-danger"></span>
                               </div>
                             </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-4 col-4">
-                                <div class="form-group">
-                                  <label>Dimension</label>
-                                  <input type="text" class="form-control" id="productDimension" name="productDimension">
-                                </div>
-                            </div> 
                             <div class="col-md-4 col-4">
                               <div class="form-group">
                                 <label for="exampleInputFile">Image</label>
@@ -296,7 +263,7 @@
               </div>
               <!-- /.modal -->              
               <div class="modal fade" id="view-product-modal">
-                  <div class="modal-dialog">
+                  <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title"><span id="view-product-modal-title"></span></h4>
@@ -306,39 +273,80 @@
                       </div>                        
                       <div class="modal-body">
                           <div class="row">
-                              <div class="col-md-6 col-12">
+                              <div class="col-md-4 col-4">
                                   <div class="form-group">
                                       <label>ID</label>
                                       <div id="viewProductId"></div>
                                   </div>
                               </div>
-                              <div class="col-md-6 col-12">
+                              <div class="col-md-4 col-4">
                                   <div class="form-group">
                                       <label>Name</label>
                                       <p id="viewProductName"></p>
                                   </div>
                               </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6 col-12">
+                              <div class="col-md-4 col-4">
                                   <div class="form-group">
                                       <label>Slug</label>
-                                      <p id="viewProductDesc"></p>
+                                      <p id="viewProductSlug"></p>
                                   </div>
                               </div>
-                              <div class="col-md-6 col-12">
+                          </div>
+                          <div class="row">
+                              <div class="col-md-4 col-4">
                                   <div class="form-group">
-                                      <label>Status</label>                                      
+                                      <label>Type</label>
+                                      <div id="viewProductType"></div>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-4">
+                                  <div class="form-group">
+                                      <label>Material</label>
+                                      <p id="viewProductMaterial"></p>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-4">
+                                  <div class="form-group">
+                                      <label>Weight</label>
+                                      <p id="viewProductWeight"></p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-4 col-4">
+                                  <div class="form-group">
+                                      <label>Dimension</label>
+                                      <div id="viewProductDimension"></div>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-4">
+                                  <div class="form-group">
+                                      <label>Image</label>
+                                      <span id="viewProductImageLink"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-4">
+                                  <div class="form-group">
+                                      <label>Category</label>
+                                      <p id="viewProductCategory"></p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-4 col-4">
+                                  <div class="form-group">
+                                      <label>Status</label>
                                       <p id="viewProductStatus"></p>
                                   </div>
                               </div>
                           </div>
                           <div class="row">
-                            <div class="col-md-12 col-12">
-                              <div class="form-group">
-                                <span id="viewSliderImageLink"></span>
+                              <div class="col-md-4 col-4">
+                                  <div class="form-group">
+                                      <label>Description</label>
+                                      <div id="viewProductDesc"></div>
+                                  </div>
                               </div>
-                            </div>
                           </div>
                       </div>
                     </div>
@@ -348,7 +356,7 @@
               </div>
               <!-- /.modal -->
               <div class="modal fade" id="edit-product-modal">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h4 class="modal-title"><span id="edit-product-modal-title"></span></h4>
@@ -360,43 +368,53 @@
                       <form name="frmEditProduct" id="frmEditProduct" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="productAction" id="productAction" value="update">
                         <div class="row">
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
                                     <label>ID</label>
                                     <input type="text" class="form-control" name="editProductId" id="editProductId" disabled>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
                                   <label>Name</label>
                                   <input type="text" class="form-control" id="editProductName" name="editProductName">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
                                     <label>Slug</label>
                                     <input type="text" class="form-control" name="editProductSlug" id="editProductSlug">
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
                                   <label>Type</label>
                                   <input type="text" class="form-control" id="editProductType" name="editProductType">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-12">
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea rows="5" class="form-control" name="editProductDesc" id="editProductDesc"></textarea>
+                                  <label>Material</label>
+                                  <input type="text" class="form-control" id="editProductMaterial" name="editProductMaterial">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-4">
+                                <div class="form-group">
+                                  <label>Weight</label>
+                                  <input type="text" class="form-control" id="editProductWeight" name="editProductWeight">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-6">
+                            <div class="col-md-4 col-4">
+                                <div class="form-group">
+                                  <label>Dimension</label>
+                                  <input type="text" class="form-control" id="editProductDimension" name="editProductDimension">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
                                   <label for="exampleInputFile">Image</label>
                                   <div class="input-group"> 
@@ -407,39 +425,48 @@
                                     </div>
                                   </div>
                                 </div>                                
-                            </div>
-                            <div class="col-md-6 col-6">
+                            </div>                            
+                            <div class="col-md-4 col-4">
                                 <div class="form-group">
-                                  <span id="editSliderImageLink"></span>
+                                   <span id="editViewProductImageLink"></span>
                                 </div>
-                            </div>                             
+                            </div>                                                       
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-12">
+                          <div class="col-md-4 col-4">
+                              <div class="form-group">
+                                  <label class="d-block">Status</label>
+                                  <div class="form-check form-check-inline">
+                                      <input
+                                          class="form-check-input"
+                                          type="radio"
+                                          name="editProductStatus"
+                                          id="editProductStatusActive"
+                                          value="1">
+                                      <label class="form-check-label" for="productStatusActive">
+                                          Active
+                                      </label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                      <input
+                                          class="form-check-input"
+                                          type="radio"
+                                          name="editProductStatus"
+                                          id="editProductStatusInactive"
+                                          value="2"
+                                          checked>
+                                      <label class="form-check-label" for="productStatusInactive">
+                                          In-Active
+                                      </label>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>  
+                        <div class="row">                            
+                            <div class="col-md-12 col-12">
                                 <div class="form-group">
-                                    <label>Status</label>
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="editProductStatus"
-                                            id="editProductStatusActive"
-                                            value="1">
-                                        <label class="form-check-label">
-                                            Active
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="editProductStatus"
-                                            id="editProductStatusActive"
-                                            value="2">
-                                        <label class="form-check-label">
-                                            In-Active
-                                        </label>
-                                    </div>
+                                    <label>Description</label>
+                                    <textarea rows="5" class="form-control" name="editProductDesc" id="editProductDesc"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -608,7 +635,13 @@
                 if (response.status === 'success') {
                     $('#viewProductId').html(response.data.id);
                     $('#viewProductName').html(response.data.name);
+                    $('#viewProductSlug').html(response.data.slug);
+                    $('#viewProductType').html(response.data.type);
+                    $('#viewProductMaterial').html(response.data.material);
+                    $('#viewProductWeight').html(response.data.weight);
+                    $('#viewProductDimension').html(response.data.dimension);
                     $('#viewProductDesc').html(response.data.description);
+                    $('#viewProductCategory').html(response.data.category_names);
                       
                     var viewStatus = '';  
                     if(response.data.status == 1){
@@ -620,23 +653,23 @@
                     $('#viewProductStatus').html(viewStatus);
                     $('#view-product-modal-title').html(response.data.name);
 
-                    // Set current slider image
-                    var sliderImage = response.data.image;
+                    // Set current product image
+                    var productImage = response.data.image;
 
                     var imageLinkHtml = '';
 
-                    if (sliderImage) {
-                        var imagePath = window.location.origin + '/ntr/admin/image/' + sliderImage;
-                        imageLinkHtml = '<label for="exampleInputFile">Image</label><div><a href="'+imagePath+'" target="_blank">'+sliderImage+'</a></div>';
+                    if (productImage) {
+                        var imagePath = window.location.origin + '/ntr/admin/image/products/' + productImage;
+                        imageLinkHtml = '<label for="exampleInputFile">Image</label><div><a href="'+imagePath+'" target="_blank">'+productImage+'</a></div>';
 
-                        $('#viewSliderImageLink').html(imageLinkHtml);
+                        $('#viewProductImageLink').html(imageLinkHtml);
                     } else {
                         imageLinkHtml = '';
-                        $('#viewSliderImageLink').html(imageLinkHtml);
+                        $('#viewProductImageLink').html(imageLinkHtml);
                     }
 
                     //Reset file input
-                    $('#sliderImage').val('');
+                    $('#productImage').val('');
 
                     $('.custom-file-label').text('Choose image');
 
@@ -667,8 +700,27 @@
                     $('#editProductDesc').val(response.data.description);
                     $('#editProductSlug').val(response.data.slug);
                     $('#editProductType').val(response.data.type);
+                    $('#editProductMaterial').val(response.data.material);
+                    $('#editProductWeight').val(response.data.weight);
+                    $('#editProductDimension').val(response.data.dimension);
+                    $('#editProductCategory').html(response.data.category_names);
 
                     $('#edit-product-modal-title').html(" "+response.data.name);
+
+                    // Set current product image
+                    var productImage = response.data.image;
+
+                    var imageLinkHtml = '';
+
+                    if (productImage) {
+                        var imagePath = window.location.origin + '/ntr/admin/image/products/' + productImage;
+                        imageLinkHtml = '<label for="exampleInputFile">Image</label><div><a href="'+imagePath+'" target="_blank">'+productImage+'</a></div>';
+
+                        $('#editViewProductImageLink').html(imageLinkHtml);
+                    } else {
+                        imageLinkHtml = '';
+                        $('#editViewProductImageLink').html(imageLinkHtml);
+                    }
 
                     // Set status radio button
                     var productStatus = response.data.status;
@@ -678,27 +730,6 @@
 
                     $('input[name="editProductStatus"][value="' + productStatus + '"]')
                         .prop('checked', true);
-
-                    // Set current slider image
-                    /*var sliderImage = response.data.image;
-
-                    var imageLinkHtml = '';
-
-                    if (sliderImage) {
-                        var imagePath = window.location.origin + '/ntr/admin/image/' + sliderImage;
-                        imageLinkHtml = '<label for="exampleInputFile">Current Image</label><div><a href="'+imagePath+'" target="_blank">'+sliderImage+'</a></div>';
-
-                        $('#editSliderImageLink').html(imageLinkHtml);
-                    } else {
-                        imageLinkHtml = '';
-                        $('#editSliderImageLink').html(imageLinkHtml);
-                    }
-
-                    //Reset file input
-                    $('#editSliderImageLink').val('');
-
-                    $('.custom-file-label').text('Choose image');*/
-
                 } else {
                     alert(response.message || 'Product not found');
                 }

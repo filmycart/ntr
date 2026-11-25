@@ -146,9 +146,27 @@
     }    
   }elseif ($pgAction === 'edit' && $pgid) {
     $stmt = mysqli_prepare(
-        $conn,
-        "SELECT id, name, description, slug, type, status FROM product WHERE id = ?"
-    );
+                $conn,
+                "SELECT
+                    p.*,
+                    GROUP_CONCAT(
+                        DISTINCT pi.image
+                        ORDER BY pi.image
+                        SEPARATOR ','
+                    ) AS images,
+                    GROUP_CONCAT(
+                        DISTINCT pc.name
+                        ORDER BY pc.id
+                        SEPARATOR ', '
+                    ) AS category_names
+                FROM product AS p
+                LEFT JOIN product_images AS pi
+                    ON p.id = pi.product_id
+                LEFT JOIN product_categories AS pc
+                    ON FIND_IN_SET(pc.id, p.category_id) > 0
+                WHERE p.id = ?
+                GROUP BY p.id"
+            );
 
     mysqli_stmt_bind_param($stmt, "i", $pgid);
     mysqli_stmt_execute($stmt);
@@ -170,30 +188,48 @@
     }
     mysqli_stmt_close($stmt);
   } elseif ($pgAction === 'view' && $pgid) {
-    $stmt = mysqli_prepare(
-        $conn,
-        "SELECT id, name, description, slug, type, status FROM product WHERE id = ?"
-    );
+        $stmt = mysqli_prepare(
+                $conn,
+                "SELECT
+                    p.*,
+                    GROUP_CONCAT(
+                        DISTINCT pi.image
+                        ORDER BY pi.image
+                        SEPARATOR ','
+                    ) AS images,
+                    GROUP_CONCAT(
+                        DISTINCT pc.name
+                        ORDER BY pc.id
+                        SEPARATOR ', '
+                    ) AS category_names
+                FROM product AS p
+                LEFT JOIN product_images AS pi
+                    ON p.id = pi.product_id
+                LEFT JOIN product_categories AS pc
+                    ON FIND_IN_SET(pc.id, p.category_id) > 0
+                WHERE p.id = ?
+                GROUP BY p.id"
+            );
 
-    mysqli_stmt_bind_param($stmt, "i", $pgid);
-    mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_param($stmt, "i", $pgid);
+        mysqli_stmt_execute($stmt);
 
-    $result = mysqli_stmt_get_result($stmt);
-    $row = mysqli_fetch_assoc($result);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
 
-    if ($row) {
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Product fetched successfully',
-            'data' => $row
-        ]);
-    } else {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Product not found'
-        ]);
-    }
-    mysqli_stmt_close($stmt);
+        if ($row) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Product fetched successfully',
+                'data' => $row
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Product not found'
+            ]);
+        }
+        mysqli_stmt_close($stmt);
   } elseif($pgAction === 'update' && $pgid) {
     $stmt = mysqli_prepare(
         $conn,
@@ -216,7 +252,7 @@
     if ($sliderImage=="") {
         $sliderImage = $row['image'];
     } else {
-        $imagePath = 'image/' . $row['image'];
+        $imagePath = 'image/products/' . $row['image'];
 
         if (!empty($row['image']) && is_file($imagePath)) {
             unlink($imagePath);
