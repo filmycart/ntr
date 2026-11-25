@@ -224,15 +224,19 @@
                             </div>
                             <div class="col-md-4 col-4">
                               <div class="form-group">
-                                <label for="exampleInputFile">Image</label>
-                                  <div class="input-group">
-                                    <div class="custom-file">
-                                      <input type="file" class="custom-file-input" id="productImage" name="productImage" accept="image/*">
-                                      <label class="custom-file-label" for="productImage">Choose Image</label>
-                                    </div>
-                                  </div> 
+                                  <label>Product Images</label>
+                                  <input type="file"
+                                           class="form-control"
+                                           name="productImages[]"
+                                           id="productImages"
+                                           accept="image/jpeg,image/png,image/webp"
+                                           multiple>
+                                    <small class="text-muted">
+                                        Select multiple images (Max 2 MB per image)
+                                    </small>
                                 </div>
-                            </div> 
+                                <div id="productImagePreview" class="row"></div>
+                            </div>
                             <div class="col-md-4 col-4">
                               <div class="form-group">
                                   <label class="d-block">Status</label>
@@ -860,7 +864,7 @@
                 if (response.status === 'success') {
                     $('#add-product-modal').modal('hide');
                     window.location.href =
-                        'admin.php?pg-url=products&msg=2';
+                        'admin.php?pg-url=products&msg=1';
                 } else {
                     $('#add-product-modal').modal('hide');
                     window.location.href =
@@ -1041,4 +1045,38 @@
             $(this).next('.custom-file-label').text(filename);
         });
     });
+
+    $('#productImages').on('change', function () {
+
+      const preview = $('#productImagePreview');
+      preview.empty();
+
+      $.each(this.files, function (index, file) {
+
+          if (!['image/jpeg', 'image/png', 'image/webp']
+                  .includes(file.type)) {
+              return;
+          }
+
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+
+              const image = $('<img>', {
+                  src: e.target.result,
+                  class: 'img-thumbnail mb-2'
+              }).css({
+                  width: '120px',
+                  height: '120px',
+                  objectFit: 'cover'
+              });
+
+              $('<div>', {
+                  class: 'col-md-3 col-6'
+              }).append(image).appendTo(preview);
+          };
+
+          reader.readAsDataURL(file);
+      });
+  });
   </script>
