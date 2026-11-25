@@ -117,17 +117,10 @@
             // Get last inserted product ID
             $productId = mysqli_insert_id($conn);
 
-            $sql_insert_image = "INSERT INTO `product_images`
-            (`product_id`,`image`, `status`, `created_by`, `created_at`)
-            VALUES
-            ('$productId','$productImage', '$productStatus', $createdBy, NOW())";
-
-            if (mysqli_query($conn, $sql_insert_image)) {
-                // Get last inserted product ID
-                $productImgId = mysqli_insert_id($conn);
-            } else {
-                echo "Error: " . mysqli_error($conn);
-            }
+            $uploadedImages = uploadProductImages(
+                $conn,
+                $productId
+            );
         } else {
             echo "Error: " . mysqli_error($conn);
         }
@@ -185,18 +178,11 @@
                     "SELECT
                         p.*,
                         GROUP_CONCAT(
-                            DISTINCT pi.image
-                            ORDER BY pi.image
-                            SEPARATOR ','
-                        ) AS images,
-                        GROUP_CONCAT(
                             DISTINCT pc.name
                             ORDER BY pc.id
                             SEPARATOR ', '
                         ) AS category_names
                     FROM product AS p
-                    LEFT JOIN product_images AS pi
-                        ON p.id = pi.product_id
                     LEFT JOIN product_categories AS pc
                         ON FIND_IN_SET(pc.id, p.category_id) > 0
                     WHERE p.id = ?
@@ -209,12 +195,38 @@
             $result = mysqli_stmt_get_result($stmt);
             $row = mysqli_fetch_assoc($result);
 
+            // Get all product images
+            $stmtImages = mysqli_prepare(
+                $conn,
+                "SELECT id, product_id, image, is_primary
+                 FROM product_images
+                 WHERE product_id = ?
+                 ORDER BY is_primary DESC, id ASC"
+            );
+
+            mysqli_stmt_bind_param($stmtImages, "i", $pgid);
+            mysqli_stmt_execute($stmtImages);
+
+            $resultImages = mysqli_stmt_get_result($stmtImages);
+
+            $images = [];
+
+            while ($imageRow = mysqli_fetch_assoc($resultImages)) {
+                $images[] = $imageRow;
+            }
+
+            mysqli_stmt_close($stmtImages);
+
             if(!empty($row)){
                 $data['product'] = $row;
             }
 
             if(!empty($categories)){
                 $data['categories'] = $categories;
+            }
+
+            if(!empty($images)){
+                $data['images'] = $images;
             }
 
             if ($row) {
@@ -363,6 +375,11 @@
        
             mysqli_query($conn,$sql_update);
 
+            $uploadedImages = uploadProductImages(
+                $conn,
+                $pgid
+            );
+
             if ($sql_update) {
                 echo json_encode([
                     'status' => 'success',
@@ -382,4 +399,102 @@
           'message' => 'Invalid request'
       ]);
   }
+
+  function uploadProductImages($conn, $productId) {
+
+        //Delete product image records
+        $stmt = mysqli_prepare(
+        $conn,
+            "DELETE FROM product_images WHERE product_id = ?"
+        );
+
+        mysqli_stmt_bind_param($stmt, "i", $productId);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        if (empty($_FILES['productImages']['name'][0])) {
+            return [];
+        }
+
+        $uploadDir = __DIR__ . '/image/products/';
+
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                throw new RuntimeException('Cannot create upload directory');
+            }
+        }
+
+        $allowedTypes = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp'
+        ];
+
+        $uploadedImages = [];
+        $maxSize = 2 * 1024 * 1024;
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+
+        $stmt = mysqli_prepare(
+            $conn,
+            "INSERT INTO product_images
+            (product_id, image, is_primary)
+            VALUES (?, ?, ?)"
+        );
+
+        foreach ($_FILES['productImages']['name'] as $key => $name) {
+            $tmpName = $_FILES['productImages']['tmp_name'][$key];
+            $fileSize = $_FILES['productImages']['size'][$key];
+            $error = $_FILES['productImages']['error'][$key];
+
+            if ($error !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            if ($fileSize > $maxSize) {
+                continue;
+            }
+
+            $mimeType = $finfo->file($tmpName);
+
+            if (!isset($allowedTypes[$mimeType])) {
+                continue;
+            }
+
+            $extension = $allowedTypes[$mimeType];
+
+            $imageName = bin2hex(random_bytes(16))
+                         . '.' . $extension;
+
+            $imagePath = $uploadDir . $imageName;
+
+            if (move_uploaded_file($tmpName, $imagePath)) {
+
+                $isPrimary = 0;
+
+                try {
+                    mysqli_stmt_bind_param(
+                        $stmt,
+                        "isi",
+                        $productId,
+                        $imageName,
+                        $isPrimary
+                    );
+
+                    if (!mysqli_stmt_execute($stmt)) {
+                        throw new RuntimeException('Image insert failed');
+                    }
+
+                    $uploadedImages[] = $imageName;
+
+                } catch (Throwable $e) {
+                    unlink($imagePath);
+                    throw $e;
+                }
+            }
+        }
+
+        mysqli_stmt_close($stmt);
+
+        return $uploadedImages;
+    }
 ?>

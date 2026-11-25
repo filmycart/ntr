@@ -224,15 +224,19 @@
                             </div>
                             <div class="col-md-4 col-4">
                               <div class="form-group">
-                                <label for="exampleInputFile">Image</label>
-                                  <div class="input-group">
-                                    <div class="custom-file">
-                                      <input type="file" class="custom-file-input" id="productImage" name="productImage" accept="image/*">
-                                      <label class="custom-file-label" for="productImage">Choose Image</label>
-                                    </div>
-                                  </div> 
+                                  <label>Product Images</label>
+                                  <input type="file"
+                                           class="form-control"
+                                           name="productImages[]"
+                                           id="productImages"
+                                           accept="image/jpeg,image/png,image/webp"
+                                           multiple>
+                                    <small class="text-muted">
+                                        Select multiple images (Max 2 MB per image)
+                                    </small>
                                 </div>
-                            </div> 
+                                <div id="productImagePreview" class="row"></div>
+                            </div>
                             <div class="col-md-4 col-4">
                               <div class="form-group">
                                   <label class="d-block">Status</label>
@@ -602,6 +606,7 @@
 
                 const product = response.data.product;
                 const categories = response.data.categories || [];
+                const images = response.data.images || [];
 
                 // Set product details
                 $('#productId').val(product.id);
@@ -663,27 +668,64 @@
                     });
                 }
 
-                // Set current product image
-                const imageContainer = $('#viewProductImageLink');
+                // Load existing product images
+                const imageContainer = $('#productImagePreview');
 
                 imageContainer.empty();
 
-                if (product.image) {
-                    const imagePath =
-                        'image/products/' +
-                        encodeURIComponent(product.image);
+                if (images.length > 0) {
+                    $.each(images, function (index, image) {
+                        const imagePath =
+                            'image/products/' +
+                            encodeURIComponent(image.image);
+                        const wrapper = $('<div>', {
+                            class: 'col-md-3 col-sm-4 col-6 mb-3'
+                        });
 
-                    const imageLabel = $('<label>').text('Image');
+                        const imageCard = $('<div>', {
+                            class: 'border rounded p-2 text-center h-100'
+                        });
 
-                    const imageLink = $('<a>', {
-                        href: imagePath,
-                        target: '_blank',
-                        rel: 'noopener noreferrer'
-                    }).text(product.image);
+                        const imageElement = $('<img>', {
+                            src: imagePath,
+                            alt: image.image,
+                            class: 'img-thumbnail'
+                        }).css({
+                            width: '100%',
+                            height: '130px',
+                            objectFit: 'contain'
+                        });
 
+                        const imageLink = $('<a>', {
+                            href: imagePath,
+                            target: '_blank',
+                            rel: 'noopener noreferrer'
+                        }).append(imageElement);
+
+                        const imageName = $('<div>', {
+                            class: 'small text-muted text-truncate mt-2'
+                        }).text(image.image);
+
+                        imageCard.append(imageLink, imageName);
+
+                        // Display primary image badge
+                        if (String(image.is_primary) === '1') {
+
+                            const primaryBadge = $('<span>', {
+                                class: 'badge badge-success mt-2'
+                            }).text('Primary Image');
+
+                            imageCard.append(primaryBadge);
+                        }
+
+                        wrapper.append(imageCard);
+                        imageContainer.append(wrapper);
+                    });
+                } else {
                     imageContainer.append(
-                        imageLabel,
-                        $('<div>').append(imageLink)
+                        $('<div>', {
+                            class: 'col-12 text-muted'
+                        }).text('No images available')
                     );
                 }
 
@@ -860,7 +902,7 @@
                 if (response.status === 'success') {
                     $('#add-product-modal').modal('hide');
                     window.location.href =
-                        'admin.php?pg-url=products&msg=2';
+                        'admin.php?pg-url=products&msg=1';
                 } else {
                     $('#add-product-modal').modal('hide');
                     window.location.href =
@@ -1041,4 +1083,38 @@
             $(this).next('.custom-file-label').text(filename);
         });
     });
+
+    $('#productImages').on('change', function () {
+
+      const preview = $('#productImagePreview');
+      preview.empty();
+
+      $.each(this.files, function (index, file) {
+
+          if (!['image/jpeg', 'image/png', 'image/webp']
+                  .includes(file.type)) {
+              return;
+          }
+
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+
+              const image = $('<img>', {
+                  src: e.target.result,
+                  class: 'img-thumbnail mb-2'
+              }).css({
+                  width: '120px',
+                  height: '120px',
+                  objectFit: 'cover'
+              });
+
+              $('<div>', {
+                  class: 'col-md-3 col-6'
+              }).append(image).appendTo(preview);
+          };
+
+          reader.readAsDataURL(file);
+      });
+  });
   </script>
