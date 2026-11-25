@@ -606,6 +606,7 @@
 
                 const product = response.data.product;
                 const categories = response.data.categories || [];
+                const images = response.data.images || [];
 
                 // Set product details
                 $('#productId').val(product.id);
@@ -667,27 +668,64 @@
                     });
                 }
 
-                // Set current product image
-                const imageContainer = $('#viewProductImageLink');
+                // Load existing product images
+                const imageContainer = $('#productImagePreview');
 
                 imageContainer.empty();
 
-                if (product.image) {
-                    const imagePath =
-                        'image/products/' +
-                        encodeURIComponent(product.image);
+                if (images.length > 0) {
+                    $.each(images, function (index, image) {
+                        const imagePath =
+                            'image/products/' +
+                            encodeURIComponent(image.image);
+                        const wrapper = $('<div>', {
+                            class: 'col-md-3 col-sm-4 col-6 mb-3'
+                        });
 
-                    const imageLabel = $('<label>').text('Image');
+                        const imageCard = $('<div>', {
+                            class: 'border rounded p-2 text-center h-100'
+                        });
 
-                    const imageLink = $('<a>', {
-                        href: imagePath,
-                        target: '_blank',
-                        rel: 'noopener noreferrer'
-                    }).text(product.image);
+                        const imageElement = $('<img>', {
+                            src: imagePath,
+                            alt: image.image,
+                            class: 'img-thumbnail'
+                        }).css({
+                            width: '100%',
+                            height: '130px',
+                            objectFit: 'contain'
+                        });
 
+                        const imageLink = $('<a>', {
+                            href: imagePath,
+                            target: '_blank',
+                            rel: 'noopener noreferrer'
+                        }).append(imageElement);
+
+                        const imageName = $('<div>', {
+                            class: 'small text-muted text-truncate mt-2'
+                        }).text(image.image);
+
+                        imageCard.append(imageLink, imageName);
+
+                        // Display primary image badge
+                        if (String(image.is_primary) === '1') {
+
+                            const primaryBadge = $('<span>', {
+                                class: 'badge badge-success mt-2'
+                            }).text('Primary Image');
+
+                            imageCard.append(primaryBadge);
+                        }
+
+                        wrapper.append(imageCard);
+                        imageContainer.append(wrapper);
+                    });
+                } else {
                     imageContainer.append(
-                        imageLabel,
-                        $('<div>').append(imageLink)
+                        $('<div>', {
+                            class: 'col-12 text-muted'
+                        }).text('No images available')
                     );
                 }
 
